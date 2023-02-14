@@ -319,7 +319,6 @@ int b_process(char* i_) {
 }
 
 
-testing once again
 int s_process(char* i_) {
 
   /* This function execute S type instructions */
