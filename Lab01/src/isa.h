@@ -233,12 +233,15 @@ unsigned BGEU (unsigned Rs1, unsigned Rs2, unsigned Imm, unsigned Funct3)
 // I instruction
 
 
-int JALR (int Rd, int Rs1, int Imm, int Funct3);
+int JALR (int Rd, int Rs1, int Imm, int Funct3)
 {
   Imm = Imm << 1;
   NEXT_STATE.PC = (CURRENT_STATE.REGS[Rs1]) + (SIGNEXT(Imm,12));
-  NEXT_STATE.REGS[Rd] = (CURRENT_STATE.PC + 4)
+  NEXT_STATE.REGS[Rd] = (CURRENT_STATE.PC + 4);
 }
+
+
+
 // J instruction
 int JAL (char* i_);
 

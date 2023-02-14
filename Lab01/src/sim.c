@@ -256,7 +256,7 @@ int b_process(char* i_) {
   imm[9] = i_[31-10];
   imm[10] = i_[31-9];
   imm[11] = i_[31-8];
-  imm[12] = '\0';  
+  imm[12] = '\0';
 
   for(int i = 0; i < 3; i++) {
     funct3[i] = i_[31-14+i];
@@ -324,6 +324,53 @@ int s_process(char* i_) {
 
   /* Add store instructions here */ 
 
+
+  char d_opcode[8];
+  d_opcode[0] = i_[31-6]; 
+  d_opcode[1] = i_[31-5]; 
+  d_opcode[2] = i_[31-4]; 
+  d_opcode[3] = i_[31-3];
+  d_opcode[4] = i_[31-2]; 
+  d_opcode[5] = i_[31-1]; 
+  d_opcode[6] = i_[31-0]; 
+  d_opcode[7] = '\0';
+
+  char rs1[6]; rs1[5] = '\0';
+  char rs2[6]; rs2[5] = '\0';		     
+  char funct3[4]; funct3[3] = '\0';
+  char imm[13]; 
+
+
+  for(int i = 0; i < 5; i++) {
+    rs1[i] = i_[31-19+i];
+    rs2[i] = i_[31-24+i];                
+  }
+
+
+  imm[0] = i_[31-31]; 
+  imm[1] = i_[31-30]; 
+  imm[2] = i_[31-29]; 
+  imm[3] = i_[31-28];
+  imm[4] = i_[31-27]; 
+  imm[5] = i_[31-26]; 
+  imm[6] = i_[31-25];
+  imm[7] = i_[31-11];
+  imm[8] = i_[31-10];
+  imm[9] = i_[31-9];
+  imm[10] = i_[31-8];
+  imm[11] = i_[31-7];
+  imm[12] = i_[31-6];
+  imm[13] = '\0';  
+
+  int Rs1 = bchar_to_int(rs1);
+  int Rs2 = bchar_to_int(rs2);  
+  int Funct3 = bchar_to_int(funct3);
+  int Imm = bchar_to_int(imm); //label
+  printf ("Opcode = %s\n Rs1 = %d\n Rs2 = %d\n Imm = %d\n Funct3 = %d\n\n",
+	  d_opcode, Rs1, Rs2, Imm, Funct3);
+  printf("\n"); 
+
+
   return 1;
 
 }
@@ -333,6 +380,27 @@ int j_process(char* i_) {
   /* This function execute Jump instructions */
 
   /* Add jump instructions here */ 
+
+
+  char d_opcode[8];
+  d_opcode[0] = i_[31-6]; 
+  d_opcode[1] = i_[31-5]; 
+  d_opcode[2] = i_[31-4]; 
+  d_opcode[3] = i_[31-3];
+  d_opcode[4] = i_[31-2]; 
+  d_opcode[5] = i_[31-1]; 
+  d_opcode[6] = i_[31-0]; 
+  d_opcode[7] = '\0';
+
+  char rd[6]; rd[5] = '\0';
+
+  for(int i = 0; i < 5; i++) {
+    rd[i] = i_[31-11+i];
+  }
+
+  char imm[21]; imm[21] ='\0';
+
+  
 
   return 1;
 
