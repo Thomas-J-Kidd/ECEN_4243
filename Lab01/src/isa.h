@@ -27,6 +27,11 @@
 
 
 
+
+
+
+
+// I Instructions
 int ADDI (int Rd, int Rs1, int Imm, int Funct3) {
 
   int cur = 0;
@@ -38,18 +43,6 @@ int ADDI (int Rd, int Rs1, int Imm, int Funct3) {
   return 0;
 
 }
-
-int BNE (int Rs1, int Rs2, int Imm, int Funct3) {
-
-  int cur = 0;
-  Imm = Imm << 1;
-  if (CURRENT_STATE.REGS[Rs1] != CURRENT_STATE.REGS[Rs2])
-    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
-  return 0;
-
-}
-
-// I Instructions
 int LB (char* i_);
 int LH (char* i_);
 int LW (char* i_);
@@ -122,25 +115,130 @@ int SLT (int Rd, int Rs1, int Rs2, int Funct3)
   return 0;
 }
 
+unsigned SLTU (unsigned Rd, unsigned Rs1, unsigned Rs2, unsigned Funct3)
+{
+   unsigned cur = 0;
 
+  if(CURRENT_STATE.REGS[Rs1] < CURRENT_STATE.REGS[Rs2], 5)
+  {
+    cur = 1;
+  }
+    
+  else
+  {
+    cur = 0;
+  }
+    
 
-int SLTU (char* i_);
-int XOR (char* i_);
-int SRL (char* i_);
-int SRA (char* i_);
-int OR (char* i_);
-int AND (char* i_);
+  NEXT_STATE.REGS[Rd] = cur;
+  return 0;
+}
+
+int XOR (int Rd, int Rs1, int Rs2, int Funct3)
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] ^ CURRENT_STATE.REGS[Rs2];
+  NEXT_STATE.REGS[Rd] = cur;  
+  return 0;
+}
+
+int SRL (int Rd, int Rs1, int Rs2, int Funct3)
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] >> CURRENT_STATE.REGS[Rs2];
+  NEXT_STATE.REGS[Rd] = cur;  
+  return 0;
+}
+
+unsigned SRA (unsigned Rd, unsigned Rs1, unsigned Rs2, unsigned Funct3, unsigned Funct7)
+{
+  unsigned cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] >> CURRENT_STATE.REGS[Rs2];
+  NEXT_STATE.REGS[Rd] = cur;  
+  return 0;
+}
+
+int OR (int Rd, int Rs1, int Rs2, int Funct3)
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] | CURRENT_STATE.REGS[Rs2];
+  NEXT_STATE.REGS[Rd] = cur;  
+  return 0;
+}
+
+int AND (int Rd, int Rs1, int Rs2, int Funct3)
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] & CURRENT_STATE.REGS[Rs2];
+  NEXT_STATE.REGS[Rd] = cur;  
+  return 0;
+}
 
 // B instructions
-int BEQ (char* i_);
-int BLT (char* i_);
-int BGE (char* i_);
-int BLTU (char* i_);
-int BGEU (char* i_);
+int BEQ (int Rs1, int Rs2, int Imm, int Funct3)
+{
+  int cur = 0;
+  Imm = Imm << 1;
+  if (CURRENT_STATE.REGS[Rs1] = CURRENT_STATE.REGS[Rs2])
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+  return 0;
+}
+
+int BNE (int Rs1, int Rs2, int Imm, int Funct3) 
+{
+  int cur = 0;
+  Imm = Imm << 1;
+  if (CURRENT_STATE.REGS[Rs1] != CURRENT_STATE.REGS[Rs2])
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+  return 0;
+}
+
+
+int BLT (int Rs1, int Rs2, int Imm, int Funct3)
+{
+  int cur = 0;
+  Imm = Imm << 1;
+  if (CURRENT_STATE.REGS[Rs1] < CURRENT_STATE.REGS[Rs2])
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+  return 0;
+}
+
+int BGE (int Rs1, int Rs2, int Imm, int Funct3_)
+{
+  int cur = 0;
+  Imm = Imm << 1;
+  if (CURRENT_STATE.REGS[Rs1] >= CURRENT_STATE.REGS[Rs2])
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+  return 0;
+}
+
+unsigned BLTU (unsigned Rs1, unsigned Rs2, unsigned Imm, unsigned Funct3)
+{
+  unsigned cur = 0;
+  Imm = Imm << 1;
+  if (CURRENT_STATE.REGS[Rs1] < CURRENT_STATE.REGS[Rs2])
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+  return 0;
+}
+
+unsigned BGEU (unsigned Rs1, unsigned Rs2, unsigned Imm, unsigned Funct3)
+{
+  unsigned cur = 0;
+  Imm = Imm << 1;
+  if (CURRENT_STATE.REGS[Rs1] >= CURRENT_STATE.REGS[Rs2])
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+  return 0;
+}
 
 // I instruction
-int JALR (char* i_);
 
+
+int JALR (int Rd, int Rs1, int Imm, int Funct3);
+{
+  Imm = Imm << 1;
+  NEXT_STATE.PC = (CURRENT_STATE.REGS[Rs1]) + (SIGNEXT(Imm,12));
+  NEXT_STATE.REGS[Rd] = (CURRENT_STATE.PC + 4)
+}
 // J instruction
 int JAL (char* i_);
 

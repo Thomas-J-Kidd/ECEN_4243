@@ -95,7 +95,7 @@ int r_process(char* i_) {
 	  d_opcode, Rs1, Rs2, Rd, Funct3, Funct7);
   printf("\n");
 
-  /* Example - use and replicate */
+  /* ADD function Example - use and replicate */
   if(!strcmp(d_opcode,"0110011")&&(Funct7==0)&&(Funct3==0)) {
     printf("--- This is an ADD instruction. \n");
     ADD(Rd, Rs1, Rs2, Funct3);
@@ -122,6 +122,48 @@ int r_process(char* i_) {
     return 0;
   }
 
+  // SLTU set less than unsigned
+   if(!strcmp(d_opcode,"0110011")&&(Funct3==3)) {
+    printf("--- This is an SLTU instruction. \n");
+    SLT(Rd, Rs1, Rs2, Funct3);
+    return 0;
+  }
+
+
+  // XOR function
+  if(!strcmp(d_opcode,"0110011")&&(Funct3==4)) {
+    printf("--- This is an XOR instruction. \n");
+    XOR(Rd, Rs1, Rs2, Funct3);
+    return 0;
+  }
+
+  // SRL function
+  if(!strcmp(d_opcode,"0110011")&&(Funct3==5)) {
+    printf("--- This is an SRL instruction. \n");
+    XOR(Rd, Rs1, Rs2, Funct3);
+    return 0;
+  }
+
+// SRA shift right arithmetic (unsigned)
+   if(!strcmp(d_opcode,"0110011")&&(Funct7==32)&&(Funct3==5)) {
+    printf("--- This is an SRA instruction. \n");
+    SRA(Rd, Rs1, Rs2, Funct3, Funct7);
+    return 0;
+  }
+
+// OR function
+  if(!strcmp(d_opcode,"0110011")&&(Funct3==6)) {
+    printf("--- This is an OR instruction. \n");
+    OR(Rd, Rs1, Rs2, Funct3);
+    return 0;
+  }
+
+  // AND function
+  if(!strcmp(d_opcode,"0110011")&&(Funct3==7)) {
+    printf("--- This is an AND instruction. \n");
+    AND(Rd, Rs1, Rs2, Funct3);
+    return 0;
+  }
 
   /* Add other data instructions here */ 
 
@@ -168,7 +210,14 @@ int i_process(char* i_) {
     printf("--- This is an ADDI instruction. \n");
     ADDI(Rd, Rs1, Imm, Funct3);
     return 0;
-  }	  
+  }	 
+
+  /* This is jump and link register Instruciton */
+  if(!strcmp(d_opcode,"1100111")) {
+    printf("--- This is an JALR instruction. \n");
+    JALR(Rd, Rs1, Imm, Funct3);
+    return 0;
+  } 
 
   return 1;	
 }
@@ -215,19 +264,55 @@ int b_process(char* i_) {
   int Rs1 = bchar_to_int(rs1);
   int Rs2 = bchar_to_int(rs2);  
   int Funct3 = bchar_to_int(funct3);
-  int Imm = bchar_to_int(imm);
+  int Imm = bchar_to_int(imm); //label
   printf ("Opcode = %s\n Rs1 = %d\n Rs2 = %d\n Imm = %d\n Funct3 = %d\n\n",
 	  d_opcode, Rs1, Rs2, Imm, Funct3);
   printf("\n");    
 
   /* Add branch instructions here */
 
-  /* This is an Add Immediate Instruciton */
-  if(!strcmp(d_opcode,"1100011")) {
+  /* This branch if equal Instruciton */
+  if(!strcmp(d_opcode,"1100011")&&(Funct3==0)) {
+    printf("--- This is an BEQ instruction. \n");
+    BEQ(Rs1, Rs2, Imm, Funct3);
+    return 0;
+  }
+
+  /* This branch if NOT equal Instruciton */
+  if(!strcmp(d_opcode,"1100011")&&(Funct3==1)) {
     printf("--- This is an BNE instruction. \n");
     BNE(Rs1, Rs2, Imm, Funct3);
     return 0;
+  }	 
+
+ /* This branch if less than Instruciton */
+  if(!strcmp(d_opcode,"1100011")&&(Funct3==4)) {
+    printf("--- This is an BLT instruction. \n");
+    BLT(Rs1, Rs2, Imm, Funct3);
+    return 0;
   }	    
+
+/* This branch if less than Instruciton */
+  if(!strcmp(d_opcode,"1100011")&&(Funct3==5)) {
+    printf("--- This is an BLTU instruction. \n");
+    BGE(Rs1, Rs2, Imm, Funct3);
+    return 0;
+  }
+
+  /* This branch if less than Instruciton */
+  if(!strcmp(d_opcode,"1100011")&&(Funct3==6)) {
+    printf("--- This is an BLTU instruction. \n");
+    BLTU(Rs1, Rs2, Imm, Funct3);
+    return 0;
+  }
+
+  /* This branch if less than Instruciton */
+  if(!strcmp(d_opcode,"1100011")&&(Funct3==7)) {
+    printf("--- This is an BGEU instruction. \n");
+    BGEU(Rs1, Rs2, Imm, Funct3);
+    return 0;
+  }
+  
 
   return 1;
 
