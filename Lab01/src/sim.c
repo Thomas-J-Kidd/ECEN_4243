@@ -324,6 +324,7 @@ int s_process(char* i_) {
 
   /* Add store instructions here */ 
 
+//fj
 
   char d_opcode[8];
   d_opcode[0] = i_[31-6]; 
