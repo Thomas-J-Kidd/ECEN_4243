@@ -23,8 +23,31 @@
 #define SIGNEXT(v, sb) ((v) | ( (0 < ( (v) & (1 << (sb-1) ) )) ? ~( (1 << (sb-1) )-1 ) : 0))
 
 
-// v or (v and shift )
+//Zero extend function
+int ZEROEXT(int v, int val)
+{
+  if(val == 8)
+   {
+    int f = 0XFF & V;
+    return f;
+   }
 
+   else if(val == 5)
+   {
+    int f = 0X1F & V;
+    return f;
+   }
+
+   else if(val == 16)
+   {
+    int f = 0XFFFF & V;
+    return f;
+   }
+
+   else {
+    printf("Invalid ZEROEXT parameters! \n");
+   }
+}
 
 
 
