@@ -324,7 +324,6 @@ int s_process(char* i_) {
 
   /* Add store instructions here */ 
 
-//fj
 
   char d_opcode[8];
   d_opcode[0] = i_[31-6]; 
@@ -401,7 +400,7 @@ int j_process(char* i_) {
 
   char imm[21]; imm[21] ='\0';
 
-  
+
 
   return 1;
 
