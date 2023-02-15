@@ -66,7 +66,15 @@ int ADDI (int Rd, int Rs1, int Imm, int Funct3) {
   return 0;
 
 }
-int LB (char* i_);
+
+int LB (int Rd, int RS1, int Imm, int Funct3)
+{
+  uint32_t address = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  int read = mem_read_32(address);
+  int data = read;
+  NEXT_STATE.REGS[Rd] = SIGNEXT((data),16); 
+};
+
 int LH (char* i_);
 int LW (char* i_);
 int LBU (char* i_);
