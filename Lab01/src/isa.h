@@ -71,14 +71,38 @@ int LB (int Rd, int Rs1, int Imm, int Funct3)
 {
   uint32_t address = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
   int read = mem_read_32(address);
-  int data = read;
+  int data = read & 0xFF;
   NEXT_STATE.REGS[Rd] = SIGNEXT((data),16); 
+  return 0;
 };
 
-int LH (char* i_);
-int LW (char* i_);
-int LBU (char* i_);
-int LHU (char* i_);
+int LH (int Rd, int Rs1, int Imm, int Funct3)
+{
+ uint32_t address = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  int read = mem_read_32(address);
+  int data = read & 0xFFFF;
+  NEXT_STATE.REGS[Rd] = SIGNEXT((data),16); 
+  return 0;
+};
+
+int LW (int Rd, int Rs1, int Imm, int Funct3)
+{
+uint32_t address = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+uint32_t data = mem_read_32(address);
+  NEXT_STATE.REGS[Rd] = data; 
+    return 0;
+};
+
+int LBU (int Rd, int Rs1, int Imm, int Funct3)
+{
+
+};
+
+int LHU (int Rd, int Rs1, int Imm, int Funct3)
+{
+
+};
+
 int SLLI (char* i_);
 int SLTI (char* i_);
 int SLTIU (char* i_);
