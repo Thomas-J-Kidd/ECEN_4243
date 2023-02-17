@@ -67,7 +67,7 @@ int ADDI (int Rd, int Rs1, int Imm, int Funct3) {
 
 }
 
-int LB (int Rd, int RS1, int Imm, int Funct3)
+int LB (int Rd, int Rs1, int Imm, int Funct3)
 {
   uint32_t address = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
   int read = mem_read_32(address);
