@@ -28,19 +28,19 @@ int ZEROEXT(int v, int val)
 {
   if(val == 8)
    {
-    int f = 0XFF & V;
+    int f = 0XFF & v;
     return f;
    }
 
    else if(val == 5)
    {
-    int f = 0X1F & V;
+    int f = 0X1F & v;
     return f;
    }
 
    else if(val == 16)
    {
-    int f = 0XFFFF & V;
+    int f = 0XFFFF & v;
     return f;
    }
 
