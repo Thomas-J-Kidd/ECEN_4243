@@ -58,10 +58,7 @@ int ZEROEXT(int v, int val)
 int ADDI (int Rd, int Rs1, int Imm, int Funct3) {
 
   int cur = 0;
-  //signed test = -1;
-  //test = SIGNEXT(Imm,12);
   cur = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
-  //printf("Printing out current state in ADDI: cur: %d, test: %d\n\n", cur, test);
   NEXT_STATE.REGS[Rd] = cur;
   return 0;
 
@@ -74,29 +71,33 @@ int LB (int Rd, int Rs1, int Imm, int Funct3)
   int data = read & 0xFF;
   NEXT_STATE.REGS[Rd] = SIGNEXT((data),16); 
   return 0;
-};
+}
 
 int LH (int Rd, int Rs1, int Imm, int Funct3)
 {
- uint32_t address = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  uint32_t address = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
   int read = mem_read_32(address);
   int data = read & 0xFFFF;
   NEXT_STATE.REGS[Rd] = SIGNEXT((data),16); 
   return 0;
-};
+}
 
 int LW (int Rd, int Rs1, int Imm, int Funct3)
 {
-uint32_t address = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
-uint32_t data = mem_read_32(address);
+  uint32_t address = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  uint32_t data = mem_read_32(address);
   NEXT_STATE.REGS[Rd] = data; 
-    return 0;
-};
+  return 0;
+}
+
 
 int LBU (int Rd, int Rs1, int Imm, int Funct3)
 {
-
-};
+  uint32_t address = CURRENT_STATE.REGS[Rs1] + ZEROEXT(Imm, 12);
+  uint32_t data = mem_read_32(address);
+  NEXT_STATE.REGS[Rd] = data; 
+  return 0;
+}
 
 int LHU (int Rd, int Rs1, int Imm, int Funct3)
 {
