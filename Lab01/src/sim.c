@@ -629,7 +629,7 @@ int u_process(char* i_) {
   /* This auipc Instruciton */
   if(!strcmp(d_opcode,"0010111")) {
     printf("--- This is an AUIPC instruction. \n");
-    LUI(Rd, Imm);
+    AUIPC(Rd, Imm);
     return 0;
   }
 
