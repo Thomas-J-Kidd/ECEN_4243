@@ -473,6 +473,11 @@ int s_process(char* i_) {
     rs2[i] = i_[31-24+i];                
   }
 
+  for(int i = 0; i < 3; i++) 
+  {
+  funct3[i] = i_[31-14+i];
+  }
+
 
   imm[0] = i_[31-31]; 
   imm[1] = i_[31-30]; 
@@ -487,7 +492,7 @@ int s_process(char* i_) {
   imm[10] = i_[31-8];
   imm[11] = i_[31-7];
   imm[12] = i_[31-6];
-  imm[13] = '\0';  
+   
 
   int Rs1 = bchar_to_int(rs1);
   int Rs2 = bchar_to_int(rs2);  
@@ -500,21 +505,21 @@ int s_process(char* i_) {
   /* This store bite Instruciton */
   if(!strcmp(d_opcode,"0100011")&&(Funct3==0)) {
     printf("--- This is an sb instruction. \n");
-    BGEU(Rs1, Rs2, Imm, Funct3);
+    SB(Rs1, Rs2, Imm, Funct3);
     return 0;
   }
 
   /* This store half word Instruciton */
   if(!strcmp(d_opcode,"0100011")&&(Funct3==1)) {
     printf("--- This is an sh instruction. \n");
-    BGEU(Rs1, Rs2, Imm, Funct3);
+    SH(Rs1, Rs2, Imm, Funct3);
     return 0;
   }
 
   /* This store word Instruciton */
   if(!strcmp(d_opcode,"0100011")&&(Funct3==2)) {
     printf("--- This is an sw instruction. \n");
-    BGEU(Rs1, Rs2, Imm, Funct3);
+    SW(Rs1, Rs2, Imm, Funct3);
     return 0;
   }
 

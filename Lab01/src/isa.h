@@ -55,14 +55,7 @@ int ZEROEXT(int v, int val)
 
 
 // I Instructions
-int ADDI (int Rd, int Rs1, int Imm, int Funct3) {
 
-  int cur = 0;
-  cur = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
-  NEXT_STATE.REGS[Rd] = cur;
-  return 0;
-
-}
 
 int LB (int Rd, int Rs1, int Imm, int Funct3)
 {
@@ -90,37 +83,150 @@ int LW (int Rd, int Rs1, int Imm, int Funct3)
   return 0;
 }
 
-
 int LBU (int Rd, int Rs1, int Imm, int Funct3)
 {
   uint32_t address = CURRENT_STATE.REGS[Rs1] + ZEROEXT(Imm, 12);
-  uint32_t data = mem_read_32(address);
-  NEXT_STATE.REGS[Rd] = data; 
+  int read = mem_read_32(address);
+  int data = read & 0xFF;
+  NEXT_STATE.REGS[Rd] = ZEROEXT((data),16); 
   return 0;
 }
 
+
 int LHU (int Rd, int Rs1, int Imm, int Funct3)
 {
+  uint32_t address = CURRENT_STATE.REGS[Rs1] + ZEROEXT(Imm, 12);
+  int read = mem_read_32(address);
+  int data = read & 0xFFFF;
+  NEXT_STATE.REGS[Rd] = ZEROEXT((data),16); 
+  return 0;
+}
 
-};
+int ADDI (int Rd, int Rs1, int Imm, int Funct3) 
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  NEXT_STATE.REGS[Rd] = cur;
+  return 0;
+}
 
-int SLLI (char* i_);
-int SLTI (char* i_);
-int SLTIU (char* i_);
-int XORI (char* i_);
-int SRLI (char* i_);
-int SRAI (char* i_);
-int ORI (char* i_);
-int ANDI (char* i_);
+
+int SLLI (int Rd, int Rs1, int Imm, int Funct3)
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] << Rd;
+  NEXT_STATE.REGS[Rd] = cur;
+  return 0;
+}
+
+
+int SLTI (int Rd, int Rs1, int Imm, int Funct3)
+{
+  int cur = 0;
+  
+  if(CURRENT_STATE.REGS[Rs1] < CURRENT_STATE.REGS[SIGNEXT(Imm, 12)])
+  {
+    cur = 1;
+  }
+    
+  else
+  {
+    cur = 0;
+  }
+    
+  NEXT_STATE.REGS[Rd] = cur;
+  return 0;
+}
+
+int SLTIU (int Rd, int Rs1, int Imm, int Funct3)
+{
+  int cur = 0;
+  
+  if(CURRENT_STATE.REGS[Rs1] < CURRENT_STATE.REGS[ZEROEXT(Imm, 12)])
+  {
+    cur = 1;
+  }
+    
+  else
+  {
+    cur = 0;
+  }
+    
+  NEXT_STATE.REGS[Rd] = cur;
+  return 0;
+}
+
+int XORI (int Rd, int Rs1, int Imm, int Funct3)
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] ^ CURRENT_STATE.REGS[SIGNEXT(Imm, 12)];
+  NEXT_STATE.REGS[Rd] = cur;  
+  return 0;
+}
+int SRLI (int Rd, int Rs1, int Imm, int Funct3)
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] >> Rd;
+  NEXT_STATE.REGS[Rd] = cur;
+  return 0;
+}
+
+int SRAI (int Rd, int Rs1, int Imm, int Funct3)
+{
+  int cur = 0;
+  cur = SIGNEXT(CURRENT_STATE.REGS[Rs1],12 ) >> Rd;
+  NEXT_STATE.REGS[Rd] = cur;
+  return 0;
+}
+
+int ORI (int Rd, int Rs1, int Imm, int Funct3)
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] | SIGNEXT(Imm, 12);
+  NEXT_STATE.REGS[Rd] = cur;  
+  return 0;
+}
+
+int ANDI (int Rd, int Rs1, int Imm, int Funct3)
+{
+  int cur = 0;
+  cur = CURRENT_STATE.REGS[Rs1] & SIGNEXT(Imm, 12);
+  NEXT_STATE.REGS[Rd] = cur;  
+  return 0;
+}
+
+
 
 // U Instruction
 int AUIPC (char* i_);
 int LUI (char* i_);
 
 // S Instruction
-int SB (char* i_);
-int SH (char* i_);
-int SW (char* i_);
+int SB (int Rs1, int Rs2, int Imm, int Funct3)
+{
+  printf("testing");
+  uint32_t address = CURRENT_STATE.REGS[Rs2];
+  printf("This is the address: %s", address);
+  uint32_t data =  ((CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12))& 0x1);
+  printf("This is the address: %s", data);
+  mem_write_32(address, data);
+  return 0;
+}
+int SH (int Rs1, int Rs2, int Imm, int Funct3)
+{
+  uint32_t address = CURRENT_STATE.REGS[Rs2];
+  uint32_t data =  CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  mem_write_32(address, data);
+  return 0;
+}
+int SW (int Rs1, int Rs2, int Imm, int Funct3)
+{
+  uint32_t address = CURRENT_STATE.REGS[Rs2];
+  uint32_t data =  CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  mem_write_32(address, data);
+  return 0;
+}
+
 
 // R instruction
 
