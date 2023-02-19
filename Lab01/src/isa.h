@@ -49,11 +49,6 @@ int ZEROEXT(int v, int val)
    }
 }
 
-
-
-
-
-
 // I Instructions
 
 
@@ -208,12 +203,14 @@ int JALR (int Rd, int Rs1, int Imm, int Funct3)
 // U Instruction
 int AUIPC (int Rd, int Imm)
 {
-  printf("Implement AUIPC");
+  int cur = Imm << 12;
+  NEXT_STATE.REGS[Rd] = cur + CURRENT_STATE.PC;
   return 0; 
 }
 int LUI (int Rd, int Imm)
 {
-  printf("Implement LUI");
+  int cur = Imm << 12;  //shift by 12
+  NEXT_STATE.REGS[Rd] = cur;
   return 0;
 }
 
@@ -230,8 +227,10 @@ int SB (int Rs1, int Rs2, int Imm, int Funct3)
 }
 int SH (int Rs1, int Rs2, int Imm, int Funct3)
 {
-  uint32_t address = CURRENT_STATE.REGS[Rs2];
-  uint32_t data =  CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  uint32_t address = CURRENT_STATE.REGS[Rs1]+ SIGNEXT(Imm, 12);
+  printf("This is the address: %d\n", address);
+  uint32_t data =  SIGNEXT((CURRENT_STATE.REGS[Rs2]),16);
+  printf("This is the data: %d\n", data);
   mem_write_32(address, data);
   return 0;
 }
@@ -416,7 +415,10 @@ unsigned BGEU (unsigned Rs1, unsigned Rs2, unsigned Imm, unsigned Funct3)
 // J instruction
 int JAL (int Rd, int Imm)
 {
-  printf("need to be implemented");
+  int imm = Imm << 1;
+  NEXT_STATE.PC = CURRENT_STATE.PC + (SIGNEXT(imm,20)) - 4;
+  NEXT_STATE.REGS[Rd] = CURRENT_STATE.PC + 4;
+  
   return 0;
 }
 

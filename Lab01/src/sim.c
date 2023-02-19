@@ -659,6 +659,12 @@ int decode_and_execute(char* i_) {
     printf("- This is an Immediate Type Instruction. \n");
     i_process(i_);
   }
+  if((i_[25] == '0') && (i_[26] == '0') &&
+     (i_[27] == '0') && (i_[28] == '0') &&
+     (i_[29] == '0') && (i_[30] == '1') && (i_[31] == '1')) {
+    printf("- This is an Immediate Type Instruction. \n");
+    i_process(i_);
+  }
   if((i_[25] == '0') && (i_[26] == '1') &&
      (i_[27] == '1') && (i_[28] == '0') &&
      (i_[29] == '0') && (i_[30] == '1') && (i_[31] == '1')) {
