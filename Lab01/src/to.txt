@@ -1,0 +1,9 @@
+to do:
+3) debug S type instructions
+4) test I type instructions if S instructions work
+5) check if all of i_process works in sim.c
+6) check if all of r_process works in sim.c
+7) debug s instructions in isa.h
+8) write u instructions in isa.h
+
+

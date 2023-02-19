@@ -268,7 +268,7 @@ if(!strcmp(d_opcode,"0000011")&&(Funct3==4))
 } 
 
 
-/* This is an Add Immediate Instruciton */
+/* This is an ADDI */
 if(!strcmp(d_opcode,"0010011")&&(Funct3==0)) 
 {
   printf("--- This is an ADDI instruction. \n");
@@ -465,7 +465,7 @@ int s_process(char* i_) {
   char rs1[6]; rs1[5] = '\0';
   char rs2[6]; rs2[5] = '\0';		     
   char funct3[4]; funct3[3] = '\0';
-  char imm[13]; 
+  char imm[13]; imm[12] = '\0';
 
 
   for(int i = 0; i < 5; i++) {
@@ -491,7 +491,6 @@ int s_process(char* i_) {
   imm[9] = i_[31-9];
   imm[10] = i_[31-8];
   imm[11] = i_[31-7];
-  imm[12] = i_[31-6];
    
 
   int Rs1 = bchar_to_int(rs1);
@@ -551,9 +550,38 @@ int j_process(char* i_) {
     rd[i] = i_[31-11+i];
   }
 
-  char imm[21]; imm[21] ='\0';
+  char imm[21]; imm[20] ='\0';
+  // get 20th bit
+  imm[0] = i_[0];
 
+  // get 10:1 bit
+  for (int i = 0; i < 10; i++)
+  {
+    imm[1+i]=i_[1+i];
+  }
 
+  // getting the 11th bit
+  imm[10] = i_[10];
+
+  for (int i = 0; i < 9; i++)
+  {
+    imm[11+i] = i_[11+i];
+  }
+
+  
+  int Imm = bchar_to_int(imm); //label
+  int Rd = bchar_to_int(rd);
+  // printf ("Opcode = %s\n",d_opcode);
+  printf ("Opcode = %s\n Rd: %d\n Imm dec = %d\n Imm binary = %s\n",
+	  d_opcode, Rd, Imm, imm);
+  printf("\n");
+
+  /* This JAL Instruciton */
+  if(!strcmp(d_opcode,"1101111")) {
+    printf("--- This is an JAL instruction. \n");
+    JAL(Rd, Imm);
+    return 0;
+  }
 
   return 1;
 
@@ -561,9 +589,50 @@ int j_process(char* i_) {
 
 int u_process(char* i_) {
 
-  /* This function execute U type instructions */
+  char d_opcode[8];
+  d_opcode[0] = i_[31-6]; 
+  d_opcode[1] = i_[31-5]; 
+  d_opcode[2] = i_[31-4]; 
+  d_opcode[3] = i_[31-3];
+  d_opcode[4] = i_[31-2]; 
+  d_opcode[5] = i_[31-1]; 
+  d_opcode[6] = i_[31-0]; 
+  d_opcode[7] = '\0';
 
-  /* Add U instructions here */ 
+  char rd[6]; rd[5] = '\0';
+
+  for(int i = 0; i < 5; i++) {
+    rd[i] = i_[31-11+i];
+  }
+
+  char imm[21]; imm[20] ='\0';
+
+  for (int i = 0; i < 20; i++)
+  {
+    imm[i] =i_[i]; 
+  }
+
+  int Imm = bchar_to_int(imm); //label
+  int Rd = bchar_to_int(rd);
+  // printf ("Opcode = %s\n",d_opcode);
+  printf ("Opcode = %s\n Rd: %d\n Imm dec = %d\n Imm binary = %s\n",
+	  d_opcode, Rd, Imm, imm);
+  printf("\n");
+
+  /* This lui Instruciton */
+  if(!strcmp(d_opcode,"0110111")) {
+    printf("--- This is an LUI instruction. \n");
+    LUI(Rd, Imm);
+    return 0;
+  }
+
+  /* This auipc Instruciton */
+  if(!strcmp(d_opcode,"0010111")) {
+    printf("--- This is an AUIPC instruction. \n");
+    LUI(Rd, Imm);
+    return 0;
+  }
+
 
   return 1;
 
@@ -620,6 +689,12 @@ int decode_and_execute(char* i_) {
     printf("- This is a U Type Instruction. \n");
     u_process(i_);
   }  
+  if((i_[25] == '0') && (i_[26] == '1') &&
+     (i_[27] == '1') && (i_[28] == '0') &&
+     (i_[29] == '1') && (i_[30] == '1') && (i_[31] == '1')) {
+    printf("- This is a U Type Instruction. \n");
+    u_process(i_);
+  }  
   if((i_[25] == '1') && (i_[26] == '1') &&
      (i_[27] == '1') && (i_[28] == '0') &&
      (i_[29] == '0') && (i_[30] == '1') && (i_[31] == '1')) {
@@ -646,7 +721,7 @@ void process_instruction() {
   */   
 
   unsigned int inst_word = mem_read_32(CURRENT_STATE.PC);
-  printf("The instruction is: %x \n", inst_word);
+  printf("\n\nThe instruction is: %x \n", inst_word);
   printf("33222222222211111111110000000000\n");
   printf("10987654321098765432109876543210\n");
   printf("--------------------------------\n");

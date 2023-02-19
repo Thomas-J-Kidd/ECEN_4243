@@ -195,20 +195,36 @@ int ANDI (int Rd, int Rs1, int Imm, int Funct3)
   return 0;
 }
 
+int JALR (int Rd, int Rs1, int Imm, int Funct3)
+{
+  Imm = Imm << 1;
+  NEXT_STATE.PC = (CURRENT_STATE.REGS[Rs1]) + (SIGNEXT(Imm,12));
+  NEXT_STATE.REGS[Rd] = (CURRENT_STATE.PC + 4);
+}
+
+
 
 
 // U Instruction
-int AUIPC (char* i_);
-int LUI (char* i_);
+int AUIPC (int Rd, int Imm)
+{
+  printf("Implement AUIPC");
+  return 0; 
+}
+int LUI (int Rd, int Imm)
+{
+  printf("Implement LUI");
+  return 0;
+}
 
 // S Instruction
 int SB (int Rs1, int Rs2, int Imm, int Funct3)
 {
-  printf("testing");
-  uint32_t address = CURRENT_STATE.REGS[Rs2];
-  printf("This is the address: %s", address);
-  uint32_t data =  ((CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12))& 0x1);
-  printf("This is the address: %s", data);
+  
+  uint32_t address = CURRENT_STATE.REGS[Rs1]+ SIGNEXT(Imm, 12);
+  printf("This is the address: %d\n", address);
+  uint32_t data =  SIGNEXT((CURRENT_STATE.REGS[Rs2]),8);
+  printf("This is the data: %d\n", data);
   mem_write_32(address, data);
   return 0;
 }
@@ -221,8 +237,10 @@ int SH (int Rs1, int Rs2, int Imm, int Funct3)
 }
 int SW (int Rs1, int Rs2, int Imm, int Funct3)
 {
+  printf("\nexecuting sw\n");
   uint32_t address = CURRENT_STATE.REGS[Rs2];
   uint32_t data =  CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  printf("Address: %d\nData: %d\n", CURRENT_STATE.REGS[Rs2], CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12));
   mem_write_32(address, data);
   return 0;
 }
@@ -392,20 +410,15 @@ unsigned BGEU (unsigned Rs1, unsigned Rs2, unsigned Imm, unsigned Funct3)
   return 0;
 }
 
-// I instruction
-
-
-int JALR (int Rd, int Rs1, int Imm, int Funct3)
-{
-  Imm = Imm << 1;
-  NEXT_STATE.PC = (CURRENT_STATE.REGS[Rs1]) + (SIGNEXT(Imm,12));
-  NEXT_STATE.REGS[Rd] = (CURRENT_STATE.PC + 4);
-}
 
 
 
 // J instruction
-int JAL (char* i_);
+int JAL (int Rd, int Imm)
+{
+  printf("need to be implemented");
+  return 0;
+}
 
 int ECALL (char* i_){return 0;}
 
