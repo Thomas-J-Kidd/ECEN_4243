@@ -55,7 +55,7 @@ int bchar_to_int(char* rsa) {
   return result;
 }
 
-// R instructions
+
 
 int r_process(char* i_) {
 
