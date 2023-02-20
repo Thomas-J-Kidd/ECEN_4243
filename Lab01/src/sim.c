@@ -555,17 +555,17 @@ int j_process(char* i_) {
   imm[0] = i_[0];
 
   // get 10:1 bit
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 8; i++)
   {
-    imm[1+i]=i_[1+i];
+    imm[1+i]=i_[31-19+i];
   }
 
   // getting the 11th bit
-  imm[10] = i_[10];
+  imm[9] = i_[11];
 
-  for (int i = 0; i < 9; i++)
+  for (int i = 0; i < 10; i++)
   {
-    imm[11+i] = i_[11+i];
+    imm[11+i] = i_[31-30+i];
   }
 
   
