@@ -237,8 +237,8 @@ int SH (int Rs1, int Rs2, int Imm, int Funct3)
 int SW (int Rs1, int Rs2, int Imm, int Funct3)
 {
   printf("\nexecuting sw\n");
-  uint32_t address = CURRENT_STATE.REGS[Rs2];
-  uint32_t data =  CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
+  uint32_t data = CURRENT_STATE.REGS[Rs2];
+  uint32_t address =  CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12);
   printf("Address: %d\nData: %d\n", CURRENT_STATE.REGS[Rs2], CURRENT_STATE.REGS[Rs1] + SIGNEXT(Imm, 12));
   mem_write_32(address, data);
   return 0;
@@ -359,7 +359,7 @@ int BEQ (int Rs1, int Rs2, int Imm, int Funct3)
   int cur = 0;
   Imm = Imm << 1;
   if (CURRENT_STATE.REGS[Rs1] = CURRENT_STATE.REGS[Rs2])
-    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,12));
   return 0;
 }
 
@@ -368,7 +368,7 @@ int BNE (int Rs1, int Rs2, int Imm, int Funct3)
   int cur = 0;
   Imm = Imm << 1;
   if (CURRENT_STATE.REGS[Rs1] != CURRENT_STATE.REGS[Rs2])
-    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,12));
   return 0;
 }
 
@@ -378,7 +378,7 @@ int BLT (int Rs1, int Rs2, int Imm, int Funct3)
   int cur = 0;
   Imm = Imm << 1;
   if (CURRENT_STATE.REGS[Rs1] < CURRENT_STATE.REGS[Rs2])
-    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,12));
   return 0;
 }
 
@@ -387,7 +387,7 @@ int BGE (int Rs1, int Rs2, int Imm, int Funct3_)
   int cur = 0;
   Imm = Imm << 1;
   if (CURRENT_STATE.REGS[Rs1] >= CURRENT_STATE.REGS[Rs2])
-    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,12));
   return 0;
 }
 
@@ -396,7 +396,7 @@ unsigned BLTU (unsigned Rs1, unsigned Rs2, unsigned Imm, unsigned Funct3)
   unsigned cur = 0;
   Imm = Imm << 1;
   if (CURRENT_STATE.REGS[Rs1] < CURRENT_STATE.REGS[Rs2])
-    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,12));
   return 0;
 }
 
@@ -405,7 +405,7 @@ unsigned BGEU (unsigned Rs1, unsigned Rs2, unsigned Imm, unsigned Funct3)
   unsigned cur = 0;
   Imm = Imm << 1;
   if (CURRENT_STATE.REGS[Rs1] >= CURRENT_STATE.REGS[Rs2])
-    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,13));
+    NEXT_STATE.PC = (CURRENT_STATE.PC + 4) + (SIGNEXT(Imm,12));
   return 0;
 }
 
