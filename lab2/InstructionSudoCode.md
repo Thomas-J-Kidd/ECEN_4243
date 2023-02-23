@@ -1,4 +1,4 @@
-# each instruction is described below 
+# Each instruction is described below 
 
 Instructions here are described first in pseudocode on what control signals need to be enabled and what the order of operations will be
 
@@ -9,7 +9,10 @@ Instructions here are described first in pseudocode on what control signals need
 
 ### B type instructions 
 
-#### BGE
+#### BGE  
+
+Branch if greater than or equal to [if (rs1 $\geq rs2$) PC = label]
+
 
 #### BLT
 
