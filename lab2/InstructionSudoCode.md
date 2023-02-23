@@ -383,8 +383,8 @@ Here are the specific ALU control signals for the different arithmetic operation
 
 |Name| OPCode | Func3 | Func7| ImmSrc | ALUSrc | ALUControl | PCSrc | RegWrite | MemWrite | ResultSrc |
 |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
-| ADD  | 0110011 | 000 |0000000| NA | 0 use SrcB | 000 (ADD) |  0  | 1|0| 0 use ALUResult|
-| SUB  | 0110011 | 000 |0100000| NA | 0 use SrcB | 001 (sub) | 0 | 1 | 0|0 use ALUResult|
+| ADD  | 0110011 | 000 |0000000| NA | 0 use SrcB | 0000 (ADD) |  0  | 1|0| 0 use ALUResult|
+| SUB  | 0110011 | 000 |0100000| NA | 0 use SrcB | 0001 (sub) | 0 | 1 | 0|0 use ALUResult|
 | SLL  | 0110011  | 001 |0000000| NA | 0 use SrcB | 1001 | 0  | 1| 0|0 use ALUResult|
 | SLT  | 0110011  | 010 |0000000| NA | 0 use SrcB | 101 | 0  | 1 | 0|0 use ALUResult|
 | SLTU  | 0110011  | 011 |0000000| NA | 0 use SrcB | 101 | 0  | 1 | 0|0 use ALUResult|
