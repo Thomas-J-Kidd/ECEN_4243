@@ -346,6 +346,25 @@ No writing to memory
 
 ## I type instructions
 
+|Name| OPCode | Func3 |Func7|  ImmSrc | ALUSrc | ALUControl | PCSrc | RegWrite | MemWrite | ResultSrc |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+|lb | 0000011 | 000 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 0 | 1 use Data Memory result |
+|lh | 0000011 | 001 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 0 | 1 use Data Memory result |
+|lw | 0000011 | 010 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 0 | 1 use Data Memory result |
+|lbu | 0000011 | 100 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 0 | 1 use Data Memory result |
+|lhu | 0000011 | 101 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 0 | 1 use Data Memory result |
+|addi | 0010011 | 000 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 1 write to reg| 0 |
+|slli | 0010011 | 001 |0000000| 00 | 1 | 1001 (SLL) | 0 | 1 | 1 write to reg | 0 |
+|slti | 0010011 | 010 |NA| 00 | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
+|sltui | 0010011 | 010 |NA| No Sign Extention | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
+
+
+
+
+
+
+
+
 ### JALR
 
 ### LB
