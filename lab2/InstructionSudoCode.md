@@ -341,48 +341,48 @@ No writing to memory
 
 
 
-### I type instructions
+## I type instructions
 
-#### JALR
+### JALR
 
-#### LB
+### LB
 
-#### LBU 
+### LBU 
 
-#### LH
+### LH
 
-#### LHU
+### LHU
 
-#### SLLI 
+### SLLI 
 
-#### SLTIU
+### SLTIU
 
-#### SRAI 
+### SRAI 
 
-#### SRLI
+### SRLI
 
-#### XORI
+### XORI
 
-### U type instructions
+## U type instructions
 
-#### LUI
+### LUI
 
-### S type instructions
+## S type instructions
 
-#### SB
+### SB
 
-#### SH
+### SH
 
-### R type instructions
+## R type instructions
 
-#### SLL
+### SLL
 
-#### SLTU
+### SLTU
 
-#### SRA
+### SRA
 
-#### SRL
+### SRL
 
-#### XOR
+### XOR
 
 
