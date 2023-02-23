@@ -17,6 +17,15 @@ ImmSrc Encoding
 
 ## B type instructions 
 
+|Name| OPCode | Func3 | ImmSrc | ALUSrc | ALUControl | PCSrc | RegWrite | MemWrite |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| BEQ  | 1100011 | 000 | 10 | 0 use SrcB | 001 (sub) |  0/1 depends | 0 | 0 |
+| BNE  | 1100011 | 001 | 10 | 0 use SrcB | 001 (sub) | 0/1 depends | 0 | 0 |
+| BLT  | 1100011 | 100 | 10 | 0 use SrcB | 101 (SLT) | 0/1 depends | 0 | 0 |
+| BGE  | 1100011 | 101 | 10 | 0 use SrcB | TB (TB) | 0/1 depends | 0 | 0 |
+| BLTU  | 1100011 | 110 | 10 | 0 use SrcB | TB (TB) | 0/1 depends | 0 | 0 |
+| BGEU  | 1100011 | 111 | 10 | 0 use SrcB | TB (TB) | 0/1 depends | 0 | 0 |
+
 ### BEQ OPcode = 1100011, Func3 = 000
 Branch if $rs1 == rs2$ PC = label
 
