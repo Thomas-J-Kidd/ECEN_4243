@@ -384,24 +384,29 @@ Here are the specific ALU control signals for the different arithmetic operation
 |Name| OPCode | Func3 | Func7| ImmSrc | ALUSrc | ALUControl | PCSrc | RegWrite | MemWrite | ResultSrc |
 |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
 | ADD  | 0110011 | 000 |0000000| NA | 0 use SrcB | 000 (ADD) |  0  | 1|0| 0 use ALUResult|
-| SUB  | 0110011 | 000 |0100000| NA | 0 use SrcB | 001 (sub) |  | 0 | 1|0 use ALUResult|
-| SLL  | 0110011  | 001 |0000000| NA | 0 use SrcB | 101 (SLT) | 0  | 1| 0|0 use ALUResult|
-| SLT  | 0110011  | 010 |0000000| NA | 0 use SrcB | TB (TB) | 0  | 1 | 0|0 use ALUResult|
-| SLTU  | 0110011  | 011 |0000000| NA | 0 use SrcB | TB (TB) | 0  | 1 | 0|0 use ALUResult|
-| XOR  | 0110011  | 100 |0000000| NA | 0 use SrcB | TB (TB) | 0  | 1 | 0 |0 use ALUResult|
-| SRL  | 0110011  | 101 |0000000| NA | 0 use SrcB | TB (TB) | 0  | 1 | 0 |0 use ALUResult|
-| SRA  | 0110011  | 101 |0100000| NA | 0 use SrcB | TB (TB) | 0  | 1 | 0 |0 use ALUResult|
-| OR  | 0110011  | 110 |0000000| NA | 0 use SrcB | TB (TB) | 0  | 1 | 0 |0 use ALUResult|
-| AND  | 0110011  | 111 |0000000| NA | 0 use SrcB | TB (TB) | 0  | 1 | 0 |0 use ALUResult|
+| SUB  | 0110011 | 000 |0100000| NA | 0 use SrcB | 001 (sub) | 0 | 1 | 0|0 use ALUResult|
+| SLL  | 0110011  | 001 |0000000| NA | 0 use SrcB | 1001 | 0  | 1| 0|0 use ALUResult|
+| SLT  | 0110011  | 010 |0000000| NA | 0 use SrcB | 101 | 0  | 1 | 0|0 use ALUResult|
+| SLTU  | 0110011  | 011 |0000000| NA | 0 use SrcB | 101 | 0  | 1 | 0|0 use ALUResult|
+| XOR  | 0110011  | 100 |0000000| NA | 0 use SrcB | 110 | 0  | 1 | 0 |0 use ALUResult|
+| SRL  | 0110011  | 101 |0000000| NA | 0 use SrcB | 111 | 0  | 1 | 0 |0 use ALUResult|
+| SRA  | 0110011  | 101 |0100000| NA | 0 use SrcB | 1000 | 0  | 1 | 0 |0 use ALUResult|
+| OR  | 0110011  | 110 |0000000| NA | 0 use SrcB | 011 | 0  | 1 | 0 |0 use ALUResult|
+| AND  | 0110011  | 111 |0000000| NA | 0 use SrcB | 010 | 0  | 1 | 0 |0 use ALUResult|
 
 
 |ALU control signal 3 bits | Function |
 |-----------|-----------|
-|000|Add|
-|001|Sub|
-|010|AND|
-|011|OR|
-|101|SLT|
+|0000|Add|
+|0001|Sub|
+|0010|AND|
+|0011|OR|
+|0101|SLT|
+|0110|XOR|
+|0111|SRL|
+|1000|SRA|
+|1001|SLL|
+
 
 
 
@@ -412,32 +417,301 @@ NO immediates are being used in this instruction. ALUSrc will be set to 0 -> ALU
 
 rd = rs1 + rs2
 
+
+#### Order of Operations
+
 1) Read the PC
 2) Get the instruction from the Instruction Memory
 3) Decode the instruction using the control unit
 4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
 5) SrcA will get RD1 from the RF
 5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
-6) The ALUControl signal will be given  to execute the addition ALUControl = 000
+6) The ALUControl signal will be given  to execute the addition ALUControl = 000 Rs1 + Rs2
 7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
 8) We write the answer back to the register specified in rd.
 9) Finally we increment the PC by passing it through the PCPlus4 module 
-### SUB
 
-### SLL
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
 
-### SLT
+### SUB OPcode: 0110011, Func3: 000, Func7: 0100000
 
-### SLTU
-
-### XOR
-
-### SRL
-
-### SRA
-
-### OR
-
-### AND
+rd = rs1 - rs2
 
 
+#### Order of Operations
+
+1) Read the PC
+2) Get the instruction from the Instruction Memory
+3) Decode the instruction using the control unit
+4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
+5) SrcA will get RD1 from the RF
+5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
+6) The ALUControl signal will be given  to execute the addition ALUControl = 001 Rs1 - Rs2
+7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
+8) We write the answer back to the register specified in rd.
+9) Finally we increment the PC by passing it through the PCPlus4 module 
+
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
+
+
+### SLL OPcode: 0110011, Func3: 001, Func7: 0000000
+
+shift logical left
+rd = rs1 << rs2
+implement via binary multiplication?
+
+
+#### Order of Operations
+
+1) Read the PC
+2) Get the instruction from the Instruction Memory
+3) Decode the instruction using the control unit
+4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
+5) SrcA will get RD1 from the RF
+5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
+6) The ALUControl signal will be given  to execute the addition ALUControl = ??? Rs1 * 2^Rs2
+7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
+8) We write the answer back to the register specified in rd.
+9) Finally we increment the PC by passing it through the PCPlus4 module 
+
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
+
+### SLT OPcode: 0110011, Func3: 010, Func7: 0000000
+
+Set less than
+if rs1 < rs2 rd = 1
+if rs1 >= rs2 rd = 0
+implemented via subtraction and check the result
+
+
+#### Order of Operations
+
+1) Read the PC
+2) Get the instruction from the Instruction Memory
+3) Decode the instruction using the control unit
+4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
+5) SrcA will get RD1 from the RF
+5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
+6) The ALUControl signal will be given  to execute the addition ALUControl = 101 Rs1 < Rs2
+7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
+8) We write the answer back to the register specified in rd.
+9) Finally we increment the PC by passing it through the PCPlus4 module 
+
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
+
+### SLTU: 0110011, Func3: 011, Func7: 0000000
+
+Set less than unsigned
+if rs1 < rs2 rd = 1
+if rs1 >= rs2 rd = 0
+implemented via subtraction and check the result
+
+
+#### Order of Operations
+
+1) Read the PC
+2) Get the instruction from the Instruction Memory
+3) Decode the instruction using the control unit
+4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
+5) SrcA will get RD1 from the RF
+5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
+6) The ALUControl signal will be given  to execute the addition ALUControl = 101 Rs1 < Rs2
+7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
+8) We write the answer back to the register specified in rd.
+9) Finally we increment the PC by passing it through the PCPlus4 module 
+
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
+
+### XOR OPcode: 0110011, Func3: 100, Func7: 0000000
+XOR operator ^ rd = rs1 ^ rs2
+
+
+#### Order of Operations
+
+1) Read the PC
+2) Get the instruction from the Instruction Memory
+3) Decode the instruction using the control unit
+4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
+5) SrcA will get RD1 from the RF
+5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
+6) The ALUControl signal will be given  to execute the addition ALUControl = 110 Rs1 ^ Rs2
+7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
+8) We write the answer back to the register specified in rd.
+9) Finally we increment the PC by passing it through the PCPlus4 module 
+
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
+
+### SRL OPcode: 0110011, Func3: 101, Func7: 0000000
+
+shift logical right
+rd = rs1 >> $rs2_{4:0}$
+implement via binary multiplication?
+
+
+#### Order of Operations
+
+1) Read the PC
+2) Get the instruction from the Instruction Memory
+3) Decode the instruction using the control unit
+4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
+5) SrcA will get RD1 from the RF
+5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
+6) The ALUControl signal will be given  to execute the addition ALUControl = 111 rs1 >> $rs2_{4:0}$
+7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
+8) We write the answer back to the register specified in rd.
+9) Finally we increment the PC by passing it through the PCPlus4 module 
+
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
+
+
+
+### SRA OPcode: 0110011, Func3: 101, Func7: 0100000
+shift right arithmetic
+rd = rs1 >>> $rs2_{4:0}$
+implement via binary multiplication?
+
+
+#### Order of Operations
+
+1) Read the PC
+2) Get the instruction from the Instruction Memory
+3) Decode the instruction using the control unit
+4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
+5) SrcA will get RD1 from the RF
+5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
+6) The ALUControl signal will be given  to execute the addition ALUControl = 1000 rs1 >>> $rs2_{4:0}$
+7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
+8) We write the answer back to the register specified in rd.
+9) Finally we increment the PC by passing it through the PCPlus4 module 
+
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
+
+### OR OPcode: 0110011, Func3: 110, Func7: 0000000
+OR
+
+rd = rs1 | rs2
+
+#### Order of Operations
+
+1) Read the PC
+2) Get the instruction from the Instruction Memory
+3) Decode the instruction using the control unit
+4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
+5) SrcA will get RD1 from the RF
+5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
+6) The ALUControl signal will be given  to execute the addition ALUControl = 011 Rs1 | Rs2
+7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
+8) We write the answer back to the register specified in rd.
+9) Finally we increment the PC by passing it through the PCPlus4 module 
+
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
+
+### AND OPcode: 0110011, Func3: 111, Func7: 0000000
+AND
+
+rd = rs1 & rs2
+
+#### Order of Operations
+
+1) Read the PC
+2) Get the instruction from the Instruction Memory
+3) Decode the instruction using the control unit
+4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
+5) SrcA will get RD1 from the RF
+5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
+6) The ALUControl signal will be given  to execute the addition ALUControl = 010 Rs1 & Rs2
+7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
+8) We write the answer back to the register specified in rd.
+9) Finally we increment the PC by passing it through the PCPlus4 module 
+
+#### Modules in use
+- Main Decoder
+- ALU Decoder
+- Instruction Memory
+- Register File
+- ALUSrc Control Mux
+- ALU
+- ResultSRC Mux
+- PCPlus 4 Mux
+- PCSrc Control mux
