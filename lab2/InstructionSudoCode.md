@@ -4,7 +4,7 @@ Instructions here are described first in pseudocode on what control signals need
 
 
 
-## Instructions
+# Instructions
 
 
 ImmSrc Encoding
