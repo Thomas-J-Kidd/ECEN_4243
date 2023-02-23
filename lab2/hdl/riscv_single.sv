@@ -116,6 +116,8 @@ module controller (input  logic [6:0] op,
    
 endmodule // controller
 
+
+// main decoder
 module maindec (input  logic [6:0] op,
 		output logic [1:0] ResultSrc,
 		output logic 	   MemWrite,
@@ -143,6 +145,7 @@ module maindec (input  logic [6:0] op,
    
 endmodule // maindec
 
+// ALU decoder
 module aludec (input  logic       opb5,
 	       input  logic [2:0] funct3,
 	       input  logic 	  funct7b5,
@@ -170,6 +173,7 @@ module aludec (input  logic       opb5,
    
 endmodule // aludec
 
+// datapath
 module datapath (input  logic        clk, reset,
 		 input  logic [1:0]  ResultSrc,
 		 input  logic 	     PCSrc, ALUSrc,
@@ -203,6 +207,7 @@ module datapath (input  logic        clk, reset,
 
 endmodule // datapath
 
+// Adder module for the ALU
 module adder (input  logic [31:0] a, b,
 	      output logic [31:0] y);
    
@@ -210,6 +215,7 @@ module adder (input  logic [31:0] a, b,
    
 endmodule
 
+// Extend module
 module extend (input  logic [31:7] instr,
 	       input  logic [1:0]  immsrc,
 	       output logic [31:0] immext);
