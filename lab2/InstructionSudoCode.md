@@ -356,7 +356,8 @@ No writing to memory
 |addi | 0010011 | 000 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 1 write to reg| 0 |
 |slli | 0010011 | 001 |0000000| 00 | 1 | 1001 (SLL) | 0 | 1 | 1 write to reg | 0 |
 |slti | 0010011 | 010 |NA| 00 | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
-|sltui | 0010011 | 010 |NA| No Sign Extention | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
+|sltiu | 0010011 | 010 |NA| No Sign Extention | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
+|xori | 0010011| 100 |NA| 00 | 1 |
 |xori | 0010011 | 011 |NA| 1 | 1 | 0110 (XOR) | 0 | 1 | 1 write to reg | 0 |
 
 
@@ -364,27 +365,40 @@ No writing to memory
 
 
 
+### LB OPcode = 0000011, Func3 = 000
+Load byte
 
+### LH OPcode = 0000011, Func3 = 001
+Load half word
 
-### JALR
+### LW OPcode = 0000011, Func3 = 010
+Load word
 
-### LB
+### LBU OPcode = 0000011, Func3 = 100
+Load byte unsigned
 
-### LBU 
+### LHU OPcode = 0000011, Func3 = 101
+Load half word unsigned
 
-### LH
+### ADDI OPcode = 0010011, Func3 = 000
 
-### LHU
+### SLLI OPcode = 0010011, Func3 = 001
 
-### SLLI 
+### SLTI OPcode = 0010011, Func3 = 010
 
-### SLTIU
+### SLTIU OPcode = 0010011, Func3 = 011
 
-### SRAI 
+### XORI OPcode = 0010011, Func3 = 100
 
-### SRLI
+### SRLI OPcode = 0010011, Func3 =101
 
-### XORI
+### SRAI OPcode = 0010011, Func3 = 101, Func7 =0100000
+
+### ORI OPcode = 0010011, Func3 = 110
+
+### ANDI OPcode = 0010011, Func3 = 111
+
+### JALR OPcode = 1100111, Func3 = 000
 
 ## U type instructions
 
@@ -702,7 +716,7 @@ rd = rs1 | rs2
 - Instruction Memory
 - Register File
 - ALUSrc Control Mux
-- ALU
+- ALU 
 - ResultSRC Mux
 - PCPlus 4 Mux
 - PCSrc Control mux
@@ -720,7 +734,7 @@ rd = rs1 & rs2
 4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
 5) SrcA will get RD1 from the RF
 5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
-6) The ALUControl signal will be given  to execute the addition ALUControl = 010 Rs1 & Rs2
+6) The ALUControl signal will be given  to execute the and comparison ALUControl = 010 Rs1 & Rs2
 7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
 8) We write the answer back to the register specified in rd.
 9) Finally we increment the PC by passing it through the PCPlus4 module 
