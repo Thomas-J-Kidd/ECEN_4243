@@ -701,7 +701,7 @@ rd = rs1 | rs2
 - Instruction Memory
 - Register File
 - ALUSrc Control Mux
-- ALU
+- ALU 
 - ResultSRC Mux
 - PCPlus 4 Mux
 - PCSrc Control mux
@@ -719,7 +719,7 @@ rd = rs1 & rs2
 4) The Main Control unit gets the following signals: ImmSrc = 0, RegWrite = 1, MemWrite = 0, ALUSrc = 0 PCSrc = 0
 5) SrcA will get RD1 from the RF
 5) The ALUSrc = 0 Multiplexer will decide to take make SrcB = RD2. 
-6) The ALUControl signal will be given  to execute the addition ALUControl = 010 Rs1 & Rs2
+6) The ALUControl signal will be given  to execute the and comparison ALUControl = 010 Rs1 & Rs2
 7) Result is gotten from the ALUResult 32bit result bus, and a ResultSrc mux is checked to 0 to allow it to go to the WD3
 8) We write the answer back to the register specified in rd.
 9) Finally we increment the PC by passing it through the PCPlus4 module 
