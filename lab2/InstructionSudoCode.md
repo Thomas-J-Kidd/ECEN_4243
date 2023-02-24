@@ -356,34 +356,48 @@ No writing to memory
 |addi | 0010011 | 000 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 1 write to reg| 0 |
 |slli | 0010011 | 001 |0000000| 00 | 1 | 1001 (SLL) | 0 | 1 | 1 write to reg | 0 |
 |slti | 0010011 | 010 |NA| 00 | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
-|sltui | 0010011 | 010 |NA| No Sign Extention | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
+|sltiu | 0010011 | 010 |NA| No Sign Extention | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
+|xori | 0010011| 100 |NA| 00 | 1 |
 
 
 
 
 
 
+### LB OPcode = 0000011, Func3 = 000
+Load byte
 
+### LH OPcode = 0000011, Func3 = 001
+Load half word
 
-### JALR
+### LW OPcode = 0000011, Func3 = 010
+Load word
 
-### LB
+### LBU OPcode = 0000011, Func3 = 100
+Load byte unsigned
 
-### LBU 
+### LHU OPcode = 0000011, Func3 = 101
+Load half word unsigned
 
-### LH
+### ADDI OPcode = 0010011, Func3 = 000
 
-### LHU
+### SLLI OPcode = 0010011, Func3 = 001
 
-### SLLI 
+### SLTI OPcode = 0010011, Func3 = 010
 
-### SLTIU
+### SLTIU OPcode = 0010011, Func3 = 011
 
-### SRAI 
+### XORI OPcode = 0010011, Func3 = 100
 
-### SRLI
+### SRLI OPcode = 0010011, Func3 =101
 
-### XORI
+### SRAI OPcode = 0010011, Func3 = 101, Func7 =0100000
+
+### ORI OPcode = 0010011, Func3 = 110
+
+### ANDI OPcode = 0010011, Func3 = 111
+
+### JALR OPcode = 1100111, Func3 = 000
 
 ## U type instructions
 
