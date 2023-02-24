@@ -357,6 +357,7 @@ No writing to memory
 |slli | 0010011 | 001 |0000000| 00 | 1 | 1001 (SLL) | 0 | 1 | 1 write to reg | 0 |
 |slti | 0010011 | 010 |NA| 00 | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
 |sltui | 0010011 | 010 |NA| No Sign Extention | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
+|xori | 0010011 | 011 |NA| 1 | 1 | 0110 (XOR) | 0 | 1 | 1 write to reg | 0 |
 
 
 
