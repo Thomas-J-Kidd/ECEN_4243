@@ -357,8 +357,11 @@ No writing to memory
 |slli | 0010011 | 001 |0000000| 00 | 1 | 1001 (SLL) | 0 | 1 | 1 write to reg | 0 |
 |slti | 0010011 | 010 |NA| 00 | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
 |sltiu | 0010011 | 010 |NA| No Sign Extention | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
-|xori | 0010011| 100 |NA| 00 | 1 |
-|xori | 0010011 | 011 |NA| 1 | 1 | 0110 (XOR) | 0 | 1 | 1 write to reg | 0 |
+|xori | 0010011| 100 |NA| 00 | 1 | 0110 (XOR) | 0 | 1 | 0 write to reg | 0 |
+|srli | 0010011 | 101 |0000000| 1 | 1 |  | 0 | 1 | 0 write to reg | 0 |
+|srai | 0010011| 101 |0100000| 00 | 1 | 0110 (XOR) | 0 | 1 | 0 write to reg | 0 |
+|ori | 0010011| 110 |NA| 00 | 1 | 0110 (XOR) | 0 | 1 | 0 write to reg | 0 |
+|andi | 0010011| 111 |NA| 00 | 1 | 0110 (XOR) | 0 | 1 | 0 write to reg | 0 |
 
 
 
@@ -381,24 +384,34 @@ Load byte unsigned
 Load half word unsigned
 
 ### ADDI OPcode = 0010011, Func3 = 000
+Add Immediate
 
 ### SLLI OPcode = 0010011, Func3 = 001
+Shift left logical 
 
 ### SLTI OPcode = 0010011, Func3 = 010
+Shift less than immediate
 
 ### SLTIU OPcode = 0010011, Func3 = 011
+Shift less than Immediate unsign
 
 ### XORI OPcode = 0010011, Func3 = 100
+Xor Immediate
 
 ### SRLI OPcode = 0010011, Func3 =101
+Shift Right Logical Immediate
 
 ### SRAI OPcode = 0010011, Func3 = 101, Func7 =0100000
+Shift Right Arithmetic Immediate
 
 ### ORI OPcode = 0010011, Func3 = 110
+Or Immediate
 
 ### ANDI OPcode = 0010011, Func3 = 111
+And Immediate
 
 ### JALR OPcode = 1100111, Func3 = 000
+Jump and Link register
 
 ## U type instructions
 
