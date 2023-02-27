@@ -353,10 +353,10 @@ No writing to memory
 |lw | 0000011 | 010 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 0 | 1 use Data Memory result |
 |lbu | 0000011 | 100 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 0 | 1 use Data Memory result |
 |lhu | 0000011 | 101 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 0 | 1 use Data Memory result |
-|addi | 0010011 | 000 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 1 write to reg| 0 |
-|slli | 0010011 | 001 |0000000| 00 | 1 | 1001 (SLL) | 0 | 1 | 1 write to reg | 0 |
-|slti | 0010011 | 010 |NA| 00 | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
-|sltiu | 0010011 | 010 |NA| No Sign Extention | 1 | 0101 (SLT) | 0 | 1 | 1 write to reg | 0 |
+|addi | 0010011 | 000 |NA| 00 | 1 | 0000 (ADD) | 0 | 1 | 0 write to reg| 0 |
+|slli | 0010011 | 001 |0000000| 00 | 1 | 1001 (SLL) | 0 | 1 | 0 write to reg | 0 |
+|slti | 0010011 | 010 |NA| 00 | 1 | 0101 (SLT) | 0 | 1 | 0 write to reg | 0 |
+|sltiu | 0010011 | 010 |NA| No Sign Extention | 1 | 0101 (SLT) | 0 | 1 | 0 write to reg | 0 |
 |xori | 0010011| 100 |NA| 00 | 1 | 0110 (XOR) | 0 | 1 | 0 write to reg | 0 |
 |srli | 0010011 | 101 |0000000| 1 | 1 |  | 0 | 1 | 0 write to reg | 0 |
 |srai | 0010011| 101 |0100000| 00 | 1 | 0110 (XOR) | 0 | 1 | 0 write to reg | 0 |
