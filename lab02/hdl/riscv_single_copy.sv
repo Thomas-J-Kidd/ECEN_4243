@@ -79,18 +79,18 @@ module riscvsingle (input  logic        clk, reset,
 		    output logic [31:0] ALUResult, WriteData,
 		    input  logic [31:0] ReadData);
    
-   logic 				ALUSrc, RegWrite, Jump, Zero, Gt, Lt;
+   logic 				ALUSrc, RegWrite, Jump, Zero;
    logic [1:0] 				ResultSrc, ImmSrc;
    logic [3:0] 				ALUControl;
    
-   controller c (Instr[6:0], Instr[14:12], Instr[30], Zero, Gt, Lt,
+   controller c (Instr[6:0], Instr[14:12], Instr[30], Zero,
 		 ResultSrc, MemWrite, PCSrc,
 		 ALUSrc, RegWrite, Jump,
 		 ImmSrc, ALUControl);
    datapath dp (clk, reset, ResultSrc, PCSrc,
 		ALUSrc, RegWrite,
 		ImmSrc, ALUControl,
-		Zero, Gt, Lt, PC, Instr,
+		Zero, PC, Instr,
 		ALUResult, WriteData, ReadData);
    
 endmodule // riscvsingle
@@ -98,7 +98,7 @@ endmodule // riscvsingle
 module controller (input  logic [6:0] op,
 		   input  logic [2:0] funct3,
 		   input  logic       funct7b5,
-		   input  logic       Zero, Gt, Lt,
+		   input  logic       Zero,
 		   output logic [1:0] ResultSrc,
 		   output logic       MemWrite,
 		   output logic       PCSrc, ALUSrc,
@@ -112,17 +112,10 @@ module controller (input  logic [6:0] op,
    maindec md (op, ResultSrc, MemWrite, Branch,
 	       ALUSrc, RegWrite, Jump, ImmSrc, ALUOp);
    aludec ad (op[5], funct3, funct7b5, ALUOp, ALUControl);
-
-  
-  
-   //assign PCSrc = (op == 1100011 && funct3 == 101) ? (Branch & (Zero | Gt)) : (op == 1100011 && funct3 == 100) ? (Branch & Lt) : (Branch & (Zero ^ funct3[0])) | Jump;
-   assign PCsrc = (op == 1100011 && funct3 == 101) ? Branch & (Zero | Gt) : (op == 1100011 && funct3 == 100) ? ~Gt : Branch & (Zero ^ funct3[0]) | Jump;
- 
+   assign PCSrc = Branch & (Zero ^ funct3[0]) | Jump;
    
 endmodule // controller
 
-
-// main decoder
 module maindec (input  logic [6:0] op,
 		output logic [1:0] ResultSrc,
 		output logic 	   MemWrite,
@@ -150,7 +143,6 @@ module maindec (input  logic [6:0] op,
    
 endmodule // maindec
 
-// ALU decoder
 module aludec (input  logic       opb5,
 	       input  logic [2:0] funct3,
 	       input  logic 	  funct7b5,
@@ -188,14 +180,13 @@ module aludec (input  logic       opb5,
    
 endmodule // aludec
 
-// datapath
 module datapath (input  logic        clk, reset,
 		 input  logic [1:0]  ResultSrc,
 		 input  logic 	     PCSrc, ALUSrc,
 		 input  logic 	     RegWrite,
 		 input  logic [1:0]  ImmSrc,
 		 input  logic [3:0]  ALUControl,
-		 output logic 	     Zero, Gt, Lt,
+		 output logic 	     Zero,
 		 output logic [31:0] PC,
 		 input  logic [31:0] Instr,
 		 output logic [31:0] ALUResult, WriteData,
@@ -210,21 +201,18 @@ module datapath (input  logic        clk, reset,
    flopr #(32) pcreg (clk, reset, PCNext, PC);
    adder  pcadd4 (PC, 32'd4, PCPlus4);
    adder  pcaddbranch (PC, ImmExt, PCTarget);
-   mux2 #(32)  pcmux (PCPlus4, PCTarget, PCSrc, PCNext);   
-
+   mux2 #(32)  pcmux (PCPlus4, PCTarget, PCSrc, PCNext);
    // register file logic
    regfile  rf (clk, RegWrite, Instr[19:15], Instr[24:20],
 	       Instr[11:7], Result, SrcA, WriteData);
    extend  ext (Instr[31:7], ImmSrc, ImmExt);
-
    // ALU logic
    mux2 #(32)  srcbmux (WriteData, ImmExt, ALUSrc, SrcB);
-   alu  alu (SrcA, SrcB, ALUControl, ALUResult, Zero, Gt, Lt);
+   alu  alu (SrcA, SrcB, ALUControl, ALUResult, Zero);
    mux3 #(32) resultmux (ALUResult, ReadData, PCPlus4,ResultSrc, Result);
 
 endmodule // datapath
 
-// Adder module for the ALU
 module adder (input  logic [31:0] a, b,
 	      output logic [31:0] y);
    
@@ -232,7 +220,6 @@ module adder (input  logic [31:0] a, b,
    
 endmodule
 
-// Extend module
 module extend (input  logic [31:7] instr,
 	       input  logic [1:0]  immsrc,
 	       output logic [31:0] immext);
@@ -328,38 +315,28 @@ module dmem (input  logic        clk, we,
 endmodule // dmem
 
 module alu (input  logic [31:0] a, b,
-            input  logic [3:0] 	alucontrol,
+            input  logic [2:0] 	alucontrol,
             output logic [31:0] result,
-            output logic 	zero, gt, lt);
+            output logic 	zero);
 
    logic [31:0] 	       condinvb, sum;
    logic 		       v;              // overflow
    logic 		       isAddSub;       // true when is add or subtract operation
-   logic MSB;
 
    assign condinvb = alucontrol[0] ? ~b : b;
    assign sum = a + condinvb + alucontrol[0];
    assign isAddSub = ~alucontrol[2] & ~alucontrol[1] |
                      ~alucontrol[1] & alucontrol[0];   
 
-
-  
    always_comb
      case (alucontrol)
-       4'b0000:  result = sum;          // add
-       4'b0001:  result = sum;          // subtract
-       4'b0010:  result = a & b;        // and
-       4'b0011:  result = a | b;        // or
-       4'b0101:  result = sum[31] ^ v;  // slt 
-       4'b0110:  result = a ^ b;        //xor
-       4'b0111:  result = a >> b;       //srl
-       4'b1000:  result = a >>> b;      //SRA
-       4'b1001:  result = a << b;       // SLL
+       3'b000:  result = sum;         // add
+       3'b001:  result = sum;         // subtract
+       3'b010:  result = a & b;       // and
+       3'b011:  result = a | b;       // or
+       3'b101:  result = sum[31] ^ v; // slt       
        default: result = 32'bx;
      endcase
-
-   assign gt = (a > b); // control signals to decide to branch if pos == 1 BGE, BGEU
-   assign lt = (a < b); // control signals to decide to branch if neg == 1 BLT, BLTU
 
    assign zero = (result == 32'b0);
    assign v = ~(alucontrol[0] ^ a[31] ^ b[31]) & (a[31] ^ sum[31]) & isAddSub;
@@ -386,4 +363,3 @@ module regfile (input  logic        clk,
    assign rd2 = (a2 != 0) ? rf[a2] : 0;
    
 endmodule // regfile
-

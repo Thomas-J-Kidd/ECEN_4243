@@ -1,4 +1,4 @@
-# //  ModelSim SE-64 2021.1 Jan 19 2021
+# //  ModelSim SE-64 2021.3 Jul 13 2021
 # //
 # //  Copyright 1991-2021 Mentor Graphics Corporation
 # //  All Rights Reserved.
@@ -13,11 +13,12 @@
 # //
 # do {.\riscv_single.do}
 # ** Warning: (vdel-134) Unable to remove locked optimized design "_opt".  Locker is jstine@sakuya.ecen.okstate.edu.
+# ** Warning: (vdel-134) Unable to remove locked optimized design "_opt1".  Locker is t@DESKTOP-B1T13Q8.
 # ** Warning: (vlib-34) Library already exists at "work".
 # Errors: 0, Warnings: 1
-# Model Technology ModelSim SE-64 vlog 2021.1 Compiler 2021.01 Jan 19 2021
-# Start time: 18:09:55 on Mar 03,2023
-# vlog -reportprogress 300 riscv_single.sv 
+# Model Technology ModelSim SE-64 vlog 2021.3 Compiler 2021.07 Jul 13 2021
+# Start time: 17:58:20 on Mar 06,2023
+# vlog -reportprogress 300 riscv_single_copy.sv 
 # -- Compiling module testbench
 # -- Compiling module riscvsingle
 # -- Compiling module controller
@@ -39,13 +40,13 @@
 # Top level modules:
 # 	testbench
 # 	flopenr
-# End time: 18:09:55 on Mar 03,2023, Elapsed time: 0:00:00
+# End time: 17:58:20 on Mar 06,2023, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vsim -debugdb -voptargs="+acc" work.testbench 
-# Start time: 18:09:55 on Mar 03,2023
+# Start time: 17:58:20 on Mar 06,2023
 # ** Note: (vsim-3812) Design is being optimized...
 # ** Note: (vsim-8611) Generating debug db.
-# ** Note: (vopt-4301) Memory core inferred for signal 'RAM' width=32, depth=64, type=RAM at location riscv_single.sv:325
+# ** Note: (vopt-4301) Memory core inferred for signal 'RAM' width=32, depth=64, type=RAM at location riscv_single_copy.sv:309
 # Loading sv_std.std
 # Loading work.testbench(fast)
 # Loading work.top(fast)
@@ -63,11 +64,18 @@
 # Loading work.mux3(fast)
 # Loading work.imem(fast)
 # Loading work.dmem(fast)
+# ** Warning: (vsim-3015) [PCDPC] - Port size (3) does not match connection size (4) for port 'alucontrol'. The port definition is at: riscv_single_copy.sv(318).
+#    Time: 0 ns  Iteration: 0  Instance: /testbench/dut/rv32single/dp/alu File: riscv_single_copy.sv Line: 211
 # ** Note: (vsim-8900) Creating design debug database vsim.dbg.
 # ** Error: (vsim-8357) Internal debugDB error id:ct1  ret:1 table context_tbl already exists
-# Simulation failed
-# ** Note: $stop    : riscv_single.sv(69)
-#    Time: 155 ns  Iteration: 1  Instance: /testbench
-# Break in Module testbench at riscv_single.sv line 69
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: t  Hostname: DESKTOP-B1T13Q8  ProcessID: 26124
+#           Attempting to use alternate WLF file "./wlftcsjrbr".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftcsjrbr
+# Simulation succeeded
+# ** Note: $stop    : riscv_single_copy.sv(66)
+#    Time: 195 ns  Iteration: 1  Instance: /testbench
+# Break in Module testbench at riscv_single_copy.sv line 66
 # Debug data file does not match loaded design.
 # Debug data file does not match loaded design.
