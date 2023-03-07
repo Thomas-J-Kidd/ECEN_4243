@@ -40,7 +40,7 @@ module testbench();
    initial
      begin
 	string memfilename;
-        memfilename = {"../riscvtest/riscvtest.memfile"};
+        memfilename = {"../riscvtest/riscvtest-bge.memfile"};
         $readmemh(memfilename, dut.imem.RAM);
      end
 
@@ -79,26 +79,26 @@ module riscvsingle (input  logic        clk, reset,
 		    output logic [31:0] ALUResult, WriteData,
 		    input  logic [31:0] ReadData);
    
-   logic 				ALUSrc, RegWrite, Jump, Zero;
+   logic 				ALUSrc, RegWrite, Jump, Zero, To_branch;
    logic [1:0] 				ResultSrc, ImmSrc;
    logic [3:0] 				ALUControl;
    
-   controller c (Instr[6:0], Instr[14:12], Instr[30], Zero,
+   controller c (Instr[6:0], Instr[14:12], Instr[30], Zero, To_branch,
 		 ResultSrc, MemWrite, PCSrc,
 		 ALUSrc, RegWrite, Jump,
 		 ImmSrc, ALUControl);
-   datapath dp (clk, reset, ResultSrc, PCSrc,
+   datapath dp (clk, reset,  ResultSrc, PCSrc,
 		ALUSrc, RegWrite,
 		ImmSrc, ALUControl,
-		Zero, PC, Instr,
-		ALUResult, WriteData, ReadData);
+		Zero, To_branch, PC, Instr,
+		ALUResult, WriteData, ReadData, Instr[14:12]);
    
 endmodule // riscvsingle
 
 module controller (input  logic [6:0] op,
 		   input  logic [2:0] funct3,
 		   input  logic       funct7b5,
-		   input  logic       Zero,
+		   input  logic       Zero, To_branch,
 		   output logic [1:0] ResultSrc,
 		   output logic       MemWrite,
 		   output logic       PCSrc, ALUSrc,
@@ -112,7 +112,8 @@ module controller (input  logic [6:0] op,
    maindec md (op, ResultSrc, MemWrite, Branch,
 	       ALUSrc, RegWrite, Jump, ImmSrc, ALUOp);
    aludec ad (op[5], funct3, funct7b5, ALUOp, ALUControl);
-   assign PCSrc = Branch & (Zero ^ funct3[0]) | Jump;
+   //assign PCSrc = Branch & (Zero ^ funct3[0]) | Jump;
+   assign PCSrc = (Branch & To_branch) | Jump;
    
 endmodule // controller
 
@@ -186,11 +187,12 @@ module datapath (input  logic        clk, reset,
 		 input  logic 	     RegWrite,
 		 input  logic [1:0]  ImmSrc,
 		 input  logic [3:0]  ALUControl,
-		 output logic 	     Zero,
+		 output logic 	     Zero, To_branch,
 		 output logic [31:0] PC,
 		 input  logic [31:0] Instr,
 		 output logic [31:0] ALUResult, WriteData,
-		 input  logic [31:0] ReadData);
+		 input  logic [31:0] ReadData,
+     input logic [2:0] funct3);
    
    logic [31:0] 		     PCNext, PCPlus4, PCTarget;
    logic [31:0] 		     ImmExt;
@@ -209,9 +211,19 @@ module datapath (input  logic        clk, reset,
    // ALU logic
    mux2 #(32)  srcbmux (WriteData, ImmExt, ALUSrc, SrcB);
    alu  alu (SrcA, SrcB, ALUControl, ALUResult, Zero);
+   loading loadwods ();
    mux3 #(32) resultmux (ALUResult, ReadData, PCPlus4,ResultSrc, Result);
 
+   // comparator logic
+   comparator toBranch(SrcA, SrcB, funct3, To_branch);
+  
+
 endmodule // datapath
+
+module loading (input logic [31:0] ReadData);
+  mux4 #(8) bytemux (ReadData[7:0], ReadData[15:8], ReadData[23:16],ReadData[31:24], LByteSource, lbyte[7:0])
+  mux2 #(16) halfwordmux (ReadData[15:0], ReadData[31:16], LWordSource, halfword[15:0])
+endmodule
 
 module adder (input  logic [31:0] a, b,
 	      output logic [31:0] y);
@@ -279,6 +291,15 @@ module mux3 #(parameter WIDTH = 8)
    
 endmodule // mux3
 
+module mux4 #(parameter WIDTH = 8)
+   (input  logic [WIDTH-1:0] d0, d1, d2, d3
+    input logic [1:0] 	     s,
+    output logic [WIDTH-1:0] y);
+   
+  assign y= s[1] ? (s[0] ? d3 : d2): (s[0] ? d1 : d0);
+   
+endmodule // mux4
+
 module top (input  logic        clk, reset,
 	    output logic [31:0] WriteData, DataAdr,
 	    output logic 	MemWrite);
@@ -315,26 +336,33 @@ module dmem (input  logic        clk, we,
 endmodule // dmem
 
 module alu (input  logic [31:0] a, b,
-            input  logic [2:0] 	alucontrol,
+            input  logic [3:0] 	alucontrol,
             output logic [31:0] result,
             output logic 	zero);
 
    logic [31:0] 	       condinvb, sum;
    logic 		       v;              // overflow
    logic 		       isAddSub;       // true when is add or subtract operation
+   logic MSB;
 
    assign condinvb = alucontrol[0] ? ~b : b;
    assign sum = a + condinvb + alucontrol[0];
    assign isAddSub = ~alucontrol[2] & ~alucontrol[1] |
                      ~alucontrol[1] & alucontrol[0];   
 
+
+  
    always_comb
      case (alucontrol)
-       3'b000:  result = sum;         // add
-       3'b001:  result = sum;         // subtract
-       3'b010:  result = a & b;       // and
-       3'b011:  result = a | b;       // or
-       3'b101:  result = sum[31] ^ v; // slt       
+       4'b0000:  result = sum;          // add
+       4'b0001:  result = sum;          // subtract
+       4'b0010:  result = a & b;        // and
+       4'b0011:  result = a | b;        // or
+       4'b0101:  result = sum[31] ^ v;  // slt 
+       4'b0110:  result = a ^ b;        //xor
+       4'b0111:  result = a >> b;       //srl
+       4'b1000:  result = a >>> b;      //SRA
+       4'b1001:  result = a << b;       // SLL
        default: result = 32'bx;
      endcase
 
@@ -342,6 +370,24 @@ module alu (input  logic [31:0] a, b,
    assign v = ~(alucontrol[0] ^ a[31] ^ b[31]) & (a[31] ^ sum[31]) & isAddSub;
    
 endmodule // alu
+
+
+module comparator (
+                  input  logic [31:0] a, b,
+                  input logic [2:0] funct3,
+                  output logic to_branch);
+    always_comb
+      case(funct3)
+        3'b000: to_branch = (a==b); //BEQ
+        3'b001: to_branch = (a!=b); //BNE
+        3'b100: to_branch = (($signed(a) < $signed(b))); //BLT
+        3'b101: to_branch = ($signed($signed(a)>=$signed(b))); //BGE
+        3'b110: to_branch = (a<b); //BLTU
+        3'b111: to_branch = (a>=b); //BGEU
+        default: to_branch = 1'b0;
+      endcase
+    
+endmodule //comparator
 
 module regfile (input  logic        clk, 
 		input  logic 	    we3, 
@@ -363,3 +409,4 @@ module regfile (input  logic        clk,
    assign rd2 = (a2 != 0) ? rf[a2] : 0;
    
 endmodule // regfile
+
