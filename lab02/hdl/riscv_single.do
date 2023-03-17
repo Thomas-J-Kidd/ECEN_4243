@@ -65,8 +65,9 @@ add wave -hex /testbench/dut/imem/*
 add wave -noupdate -divider -height 32 "Register File"
 add wave -hex /testbench/dut/rv32single/dp/rf/*
 add wave -hex /testbench/dut/rv32single/dp/rf/rf
-
-
+add wave -noupdate -divider -height 32 "Loading Module"
+#add wave -hex /testbench/dut/rv32single/dp/loading/*
+#add wave -hex /testbench/dut/rv32single/dp/loading/loading
 -- Set Wave Output Items 
 TreeUpdate [SetDefaultTree]
 WaveRestoreZoom {0 ps} {200 ns}

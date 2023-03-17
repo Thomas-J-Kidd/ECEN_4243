@@ -40,7 +40,7 @@ module testbench();
    initial
      begin
 	string memfilename;
-        memfilename = {"../riscvtest/riscvtest.memfile"};
+        memfilename = {"../riscvtest/riscvtest-lb.memfile"};
         $readmemh(memfilename, dut.imem.RAM);
      end
 
@@ -227,7 +227,7 @@ endmodule // datapath
 // LWordSource and CHOOSESrc
 //
 // DONE: create LByteSource, LWordSource and CHOOSESrc control signals. 
-// TODO: Test loading module
+// TODO: Fix error regarding the case statement. 
 module loading (input logic [31:0] ReadData, input logic [2:0] func3, input logic [1:0] ResultSrc, output logic [31:0] out);
   // Control signals yet to be implemented. Just created for testing purposes
   logic LWordSource;
@@ -248,10 +248,10 @@ module loading (input logic [31:0] ReadData, input logic [2:0] func3, input logi
 	
   mux4 #(8) bytemux (ReadData[7:0], ReadData[15:8], ReadData[23:16],ReadData[31:24], LByteSource, lbyte[7:0]);
   mux2 #(16) halfwordmux (ReadData[15:0], ReadData[31:16], LWordSource, halfword[15:0]);
-  mux3 #(32) choose_b_h_w_mux (lbyte[7:0], halfword[15:0], ReadData[31:0], CHOOSESrc, out);
+  mux3 #(8) choose_b_h_w_mux (lbyte[7:0], halfword[15:0], ReadData[31:0], CHOOSESrc, out);
 
  always_comb
-  if (ResultSrc[0]){
+  //if (ResultSrc[0]){
 
   // having trouble figuring out how to output the 32 bit data. For example
   // Problme: instead of sending out 0x(zzzzzz07) it should send (0x00000007) 
@@ -260,8 +260,8 @@ module loading (input logic [31:0] ReadData, input logic [2:0] func3, input logi
             3'b001: out = {16'b0, out};
 	    3'b010: out = {out};
 	    default: out = {out};
-       endcase
-  }
+       endcase 
+  //}
   
    
 
