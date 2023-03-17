@@ -27,7 +27,7 @@ if [file exists work] {
 vlib work
 
 # compile source files
-vlog riscv_single_testing_copy.sv
+vlog riscv_single_working_backup.sv
 
 # start and run simulation
 vsim -debugdb -voptargs=+acc work.testbench
