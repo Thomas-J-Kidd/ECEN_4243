@@ -15,8 +15,8 @@ riscv_single_working_backup.sv
 
 ### Testing files
 
-riscv_single_testing_copy.sv
-riscv_single.do 
+riscv_single_testing.sv
+riscv_single_testing.do 
 
 ##### Theses are the testing files as of right now. 
 
@@ -42,25 +42,11 @@ the choose_b_h_w_mux decided if the instruction is lb, lh, or lw. It does this t
 The trouble we are running into is how to select the choose_b_h_w_mux variable. Using simply just func3 does not work because other instructions func3 will also come through. Thats why I started using ResultSrc. ResultSrc will always be 01 for any load instruction. Becaus of this I am trying to do a choosing statement starting line 253.  THIS DOES NOT WORK CURRENTLY. 
 
 ### ISSUE
-
-We are having problems choosing the correct output value. We need to only choose the variable "out" in the loading module when we are using a load instruction. Every other time we want to let the ***"ReadData"*** variable through. This is where the issue is. Line 253 error: 
-
-```
-# ** Error: (vlog-13069) riscv_single_testing_copy.sv(258): near "case": syntax error, unexpected case.
-# ** Error: riscv_single_testing_copy.sv(277): (vlog-2730) Undefined variable: 'a'.
-# ** Error: riscv_single_testing_copy.sv(277): (vlog-2730) Undefined variable: 'b'.
-```
-
-This is the current error. Tried some things but didnt work yet. 
-
-
-
-
+None as of right now
 
 
 ## TODO:
 
-- finish loading instructions
 - implement sw, sh, sb
 - implement jal, jalr, lui, the weird instructions. 
 - test all arrithemtic instructions. 

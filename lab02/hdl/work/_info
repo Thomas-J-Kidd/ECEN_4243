@@ -11,7 +11,7 @@ cModel Technology
 Z0 d/home/tk/Documents/ECEN_4243/lab02/hdl
 vadder
 Z1 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
-Z2 !s110 1679025195
+Z2 !s110 1679097878
 !i10b 1
 !s100 ??ZSi<lYSSQZABK`nURL42
 Z3 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -19,7 +19,7 @@ IR0>PF5ibzOA3Q97eT;naD3
 Z4 VDg1SIo80bB@j0V0VzS_@n1
 S1
 R0
-Z5 w1679024955
+Z5 w1679097868
 Z6 8riscv_single_testing_copy.sv
 Z7 Friscv_single_testing_copy.sv
 !i122 0
@@ -28,7 +28,7 @@ Z8 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z9 !s108 1679025195.000000
+Z9 !s108 1679097878.000000
 !s107 riscv_single_testing_copy.sv|
 Z10 !s90 -reportprogress|300|riscv_single_testing_copy.sv|
 !i113 1
@@ -61,9 +61,9 @@ valudec
 R1
 R2
 !i10b 1
-!s100 QO;jfD^d927[OdI7<0aBN3
+!s100 ;mYQO7S8dB5kG44bloPmV2
 R3
-I7ZPkH[URbYn8GARnEELaz3
+IVK;n<55nLU`nFONJb_IYK1
 R4
 S1
 R0
@@ -277,9 +277,9 @@ vloading
 R1
 R2
 !i10b 1
-!s100 T]Zi3=DVM^NYPI0OhHY=F2
+!s100 YQo78]322=l>U1R5Xg>6c0
 R3
-ICN^d]?zGHU]EkV6=_Y^zV0
+Igfnm@@QjO9P5hTbg:l`LY1
 R4
 S1
 R0
@@ -445,9 +445,9 @@ vtestbench
 R1
 R2
 !i10b 1
-!s100 4PJdg]hG`g46OBN8Eoaa:0
+!s100 o]oNMCddC4EOB3Q6Hji2H1
 R3
-I;9FFR7zd;LYSE2l>[k8]I1
+IAKaeWXoCfjBJ:fI:<IRHk3
 R4
 S1
 R0

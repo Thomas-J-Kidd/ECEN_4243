@@ -27,7 +27,7 @@ if [file exists work] {
 vlib work
 
 # compile source files
-vlog riscv_single_working_backup.sv
+vlog riscv_single_testing_copy.sv
 
 # start and run simulation
 vsim -debugdb -voptargs=+acc work.testbench
@@ -65,8 +65,9 @@ add wave -hex /testbench/dut/imem/*
 add wave -noupdate -divider -height 32 "Register File"
 add wave -hex /testbench/dut/rv32single/dp/rf/*
 add wave -hex /testbench/dut/rv32single/dp/rf/rf
-
-
+add wave -noupdate -divider -height 32 "Loading Module"
+add wave -hex /testbench/dut/rv32single/dp/load/*
+#add wave -hex /testbench/dut/rv32single/dp/load/load
 -- Set Wave Output Items 
 TreeUpdate [SetDefaultTree]
 WaveRestoreZoom {0 ps} {200 ns}
@@ -83,7 +84,7 @@ configure wave -childrowmargin 2
 run 300 ns
 
 -- Add schematic
-add schematic -full sim:/testbench/dut/rv32single
+#add schematic -full sim:/testbench/dut/rv32single
 
 -- Save memory for checking (if needed)
 # mem save -outfile memory.dat -wordsperline 1 /testbench/dut/dmem/RAM

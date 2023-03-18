@@ -40,7 +40,7 @@ module testbench();
    initial
      begin
 	string memfilename;
-        memfilename = {"../riscvtest/riscvtest-lb.memfile"};
+        memfilename = {"../riscvtest/riscvtest-lh.memfile"};
         $readmemh(memfilename, dut.imem.RAM);
      end
 
@@ -150,7 +150,7 @@ module aludec (input  logic       opb5,
 	       input  logic [1:0] ALUOp,
 	       output logic [3:0] ALUControl);
    
-   logic 			  op_func7;
+   logic 			  op_funch;
    
    assign op_func7 = funct7b5 & opb5; // TRUE for R–type subtract
    always_comb
@@ -256,8 +256,8 @@ module loading (input logic [31:0] ReadData, input logic [2:0] func3, input logi
   // having trouble figuring out how to output the 32 bit data. For example
   // Problme: instead of sending out 0x(zzzzzz07) it should send (0x00000007) 
        case(func3)
-	    3'b000: out = {24'b0, out};
-            3'b001: out = {16'b0, out};
+	    3'b000: out = {24'b0, lbyte[7:0]};
+            3'b001: out = {16'b0, halfword[15:0]};
 	    3'b010: out = {out};
 	    default: out = {out};
        endcase 

@@ -40,7 +40,7 @@ module testbench();
    initial
      begin
 	string memfilename;
-        memfilename = {"../riscvtest/riscvtest.memfile"};
+        memfilename = {"../riscvtest/riscvtest-lh.memfile"};
         $readmemh(memfilename, dut.imem.RAM);
      end
 
@@ -150,7 +150,7 @@ module aludec (input  logic       opb5,
 	       input  logic [1:0] ALUOp,
 	       output logic [3:0] ALUControl);
    
-   logic 			  op_func7;
+   logic 			  op_funch;
    
    assign op_func7 = funct7b5 & opb5; // TRUE for R–type subtract
    always_comb
@@ -197,7 +197,7 @@ module datapath (input  logic        clk, reset,
    logic [31:0] 		     PCNext, PCPlus4, PCTarget;
    logic [31:0] 		     ImmExt;
    logic [31:0] 		     SrcA, SrcB;
-   logic [31:0] 		     Result;
+   logic [31:0] 		     Result, LoadOut;
    
    // next PC logic
    flopr #(32) pcreg (clk, reset, PCNext, PC);
@@ -211,8 +211,10 @@ module datapath (input  logic        clk, reset,
    // ALU logic
    mux2 #(32)  srcbmux (WriteData, ImmExt, ALUSrc, SrcB);
    alu  alu (SrcA, SrcB, ALUControl, ALUResult, Zero);
-   
-   mux3 #(32) resultmux (ALUResult, ReadData, PCPlus4,ResultSrc, Result);
+   // adding load word, half world, and byte module into the databath
+   // this is to be able to use the 3 different instructions
+   loading load(ReadData,funct3, ResultSrc, LoadOut);
+   mux3 #(32) resultmux (ALUResult, LoadOut, PCPlus4,ResultSrc, Result);
 
    // comparator logic
    comparator toBranch(SrcA, SrcB, funct3, To_branch);
@@ -220,10 +222,54 @@ module datapath (input  logic        clk, reset,
 
 endmodule // datapath
 
-/*module loading (input logic [31:0] ReadData);
-  mux4 #(8) bytemux (ReadData[7:0], ReadData[15:8], ReadData[23:16],ReadData[31:24], LByteSource, lbyte[7:0];)
+// the module works by taking in the control signals and choosing the correct
+// output based off of those signals. The control signals are LByteSource, 
+// LWordSource and CHOOSESrc
+//
+// DONE: create LByteSource, LWordSource and CHOOSESrc control signals. 
+// TODO: Fix error regarding the case statement. 
+module loading (input logic [31:0] ReadData, input logic [2:0] func3, input logic [1:0] ResultSrc, output logic [31:0] out);
+  // Control signals yet to be implemented. Just created for testing purposes
+  logic LWordSource;
+  logic [1:0]LByteSource;
+  logic [1:0]CHOOSESrc; 
+
+  // internal mux variables
+  logic [7:0] lbyte;
+  logic [15:0] halfword;
+
+  // these should always be the following for now: maybe change with lui
+  assign LByteSource = 2'b00;
+  assign LWordSource = 1'b0;
+
+
+  // get if statement to decide which load function to use based on the func3
+  assign CHOOSESrc = ResultSrc[0] ? (func3[0] ? 2'b01 : (func3[1] ? 2'b10 : 2'b00)): 2'b10;
+	
+  mux4 #(8) bytemux (ReadData[7:0], ReadData[15:8], ReadData[23:16],ReadData[31:24], LByteSource, lbyte[7:0]);
   mux2 #(16) halfwordmux (ReadData[15:0], ReadData[31:16], LWordSource, halfword[15:0]);
-endmodule*/
+  mux3 #(8) choose_b_h_w_mux (lbyte[7:0], halfword[15:0], ReadData[31:0], CHOOSESrc, out);
+
+ always_comb
+  //if (ResultSrc[0]){
+
+  // having trouble figuring out how to output the 32 bit data. For example
+  // Problme: instead of sending out 0x(zzzzzz07) it should send (0x00000007) 
+       case(func3)
+	    3'b000: out = {24'b0, lbyte[7:0]};
+            3'b001: out = {16'b0, halfword[15:0]};
+	    3'b010: out = {out};
+	    default: out = {out};
+       endcase 
+  //}
+  
+   
+
+
+
+  //assign out = ResultSrc[0] ? out : ReadData;
+endmodule // load end
+
 
 module adder (input  logic [31:0] a, b,
 	      output logic [31:0] y);
@@ -409,3 +455,4 @@ module regfile (input  logic        clk,
    assign rd2 = (a2 != 0) ? rf[a2] : 0;
    
 endmodule // regfile
+
