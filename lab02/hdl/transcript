@@ -1,13 +1,14 @@
-# do riscv_single.do
+# do riscv_single_testing.do
 # Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
-# Start time: 19:04:38 on Mar 17,2023
-# vlog -reportprogress 300 riscv_single_testing_copy.sv 
+# Start time: 19:36:12 on Mar 17,2023
+# vlog -reportprogress 300 riscv_single_testing.sv 
 # -- Compiling module testbench
 # -- Compiling module riscvsingle
 # -- Compiling module controller
 # -- Compiling module maindec
 # -- Compiling module aludec
 # -- Compiling module datapath
+# -- Compiling module storing
 # -- Compiling module loading
 # -- Compiling module adder
 # -- Compiling module extend
@@ -26,10 +27,10 @@
 # Top level modules:
 # 	testbench
 # 	flopenr
-# End time: 19:04:38 on Mar 17,2023, Elapsed time: 0:00:00
+# End time: 19:36:12 on Mar 17,2023, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vsim -debugdb -voptargs="+acc" work.testbench 
-# Start time: 19:04:38 on Mar 17,2023
+# Start time: 19:36:12 on Mar 17,2023
 # Loading sv_std.std
 # Loading work.testbench
 # Loading work.top
@@ -47,21 +48,20 @@
 # Loading work.loading
 # Loading work.mux4
 # Loading work.mux3
+# Loading work.storing
 # Loading work.comparator
 # Loading work.imem
 # Loading work.dmem
-# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (16) for port 'd1'. The port definition is at: riscv_single_testing_copy.sv(332).
-#    Time: 0 ps  Iteration: 0  Instance: /testbench/dut/rv32single/dp/load/choose_b_h_w_mux File: riscv_single_testing_copy.sv Line: 251
-# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (32) for port 'd2'. The port definition is at: riscv_single_testing_copy.sv(332).
-#    Time: 0 ps  Iteration: 0  Instance: /testbench/dut/rv32single/dp/load/choose_b_h_w_mux File: riscv_single_testing_copy.sv Line: 251
-# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (32) for port 'y'. The port definition is at: riscv_single_testing_copy.sv(334).
-#    Time: 0 ps  Iteration: 0  Instance: /testbench/dut/rv32single/dp/load/choose_b_h_w_mux File: riscv_single_testing_copy.sv Line: 251
+# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (16) for port 'd1'. The port definition is at: riscv_single_testing.sv(354).
+#    Time: 0 ps  Iteration: 0  Instance: /testbench/dut/rv32single/dp/load/choose_b_h_w_mux File: riscv_single_testing.sv Line: 275
+# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (32) for port 'd2'. The port definition is at: riscv_single_testing.sv(354).
+#    Time: 0 ps  Iteration: 0  Instance: /testbench/dut/rv32single/dp/load/choose_b_h_w_mux File: riscv_single_testing.sv Line: 275
+# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (32) for port 'y'. The port definition is at: riscv_single_testing.sv(356).
+#    Time: 0 ps  Iteration: 0  Instance: /testbench/dut/rv32single/dp/load/choose_b_h_w_mux File: riscv_single_testing.sv Line: 275
 # ** Note: (vsim-8900) Creating design debug database vsim.dbg.
 # It appears vopt was not run with -debugdb option on this design.
 # Advanced Causality and Schematic debug features will not be available.
 # Simulation failed
-# ** Note: $stop    : riscv_single_testing_copy.sv(69)
-#    Time: 195 ps  Iteration: 1  Instance: /testbench
-# Break in Module testbench at riscv_single_testing_copy.sv line 69
-# End time: 19:05:27 on Mar 17,2023, Elapsed time: 0:00:49
-# Errors: 0, Warnings: 3
+# ** Note: $stop    : riscv_single_testing.sv(69)
+#    Time: 145 ps  Iteration: 1  Instance: /testbench
+# Break in Module testbench at riscv_single_testing.sv line 69
