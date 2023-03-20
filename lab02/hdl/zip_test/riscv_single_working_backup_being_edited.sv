@@ -133,10 +133,10 @@ module maindec (input  logic [6:0] op,
    always_comb
      case(op)
        // RegWrite_ImmSrc_ALUSrc_MemWrite_ResultSrc_Branch_ALUOp_Jump
-       7'b0000011: controls = 11'b1_00_1_0_01_0_00_0; // load functions
+       7'b0000011: controls = 11'b1_00_1_0_01_0_00_0; // lw
        7'b0100011: controls = 11'b0_01_1_1_00_0_00_0; // sw
        7'b0110011: controls = 11'b1_xx_0_0_00_0_10_0; // R–type
-       7'b1100011: controls = 11'b0_10_0_0_00_1_01_0; // Branch functions
+       7'b1100011: controls = 11'b0_10_0_0_00_1_01_0; // beq
        7'b0010011: controls = 11'b1_00_1_0_00_0_10_0; // I–type ALU
        7'b1101111: controls = 11'b1_11_0_0_10_0_00_1; // jal
        default: controls = 11'bx_xx_x_x_xx_x_xx_x; // ???
@@ -198,7 +198,7 @@ module datapath (input  logic        clk, reset,
    logic [31:0] 		     ImmExt;
    logic [31:0] 		     SrcA, SrcB;
    logic [31:0] 		     Result, LoadOut;
-   logic [31:0]	                     WriteData_before;   
+   
    // next PC logic
    flopr #(32) pcreg (clk, reset, PCNext, PC);
    adder  pcadd4 (PC, 32'd4, PCPlus4);
@@ -206,20 +206,18 @@ module datapath (input  logic        clk, reset,
    mux2 #(32)  pcmux (PCPlus4, PCTarget, PCSrc, PCNext);
    // register file logic
    regfile  rf (clk, RegWrite, Instr[19:15], Instr[24:20],
-	       Instr[11:7], Result, SrcA, WriteData_before);
+	       Instr[11:7], Result, SrcA, WriteData);
    extend  ext (Instr[31:7], ImmSrc, ImmExt);
    // ALU logic
-   mux2 #(32)  srcbmux (WriteData_before, ImmExt, ALUSrc, SrcB);
+   mux2 #(32)  srcbmux (WriteData, ImmExt, ALUSrc, SrcB);
    alu  alu (SrcA, SrcB, ALUControl, ALUResult, Zero);
    // adding load word, half world, and byte module into the databath
    // this is to be able to use the 3 different instructions
    loading load(ReadData,funct3, ResultSrc, LoadOut);
-   
-   // If we have a store function, modify WriteData to the correct size.
-   // If sw use 32 bit
-   // If sh use 16 bit
-   // If sb use 8 bit
-   // storing store(WriteData_before, funct3, WriteData);
+
+   // storing
+   //
+   storing store(WriteData, funct3, WriteData);
 
 
    mux3 #(32) resultmux (ALUResult, LoadOut, PCPlus4,ResultSrc, Result);
@@ -230,28 +228,32 @@ module datapath (input  logic        clk, reset,
 
 endmodule // datapath
 
-// storing module chooses the correct size of the data to be stored. 
+// storing module chooses the correct size of the data to be stored.
 // input: based on the MemWrite func3, and WriteData
 // output: modified WriteData
 // DONE: Nothing
 // TODO: implement how to choose if we want to modify WriteData
-// TODO: modify write data using a case statement.  
+// TODO: modify write data using a case statement.
 
 module storing (input logic [31:0] WriteData, input logic [2:0] func3, output logic [31:0] out);
 
-	always_comb
-		case(func3)
-			3'b000: out = {24'b0, WriteData[7:0]};
-			3'b001: out = {16'b0, WriteData[15:0]};
-			3'b010: out = {WriteData};
-			default: out = {out};
-		endcase
+        always_comb
+                case(func3)
+                        3'b000: out = {24'b0, WriteData[7:0]};
+                        3'b001: out = {16'b0, WriteData[15:0]};
+                        3'b010: out = {WriteData};
+                        default: out = {32'hx};
+                endcase
 
 endmodule // storing
+
+
 // the module works by taking in the control signals and choosing the correct
 // output based off of those signals. The control signals are LByteSource, 
 // LWordSource and CHOOSESrc
-// DONE: loading works 
+//
+// DONE: create LByteSource, LWordSource and CHOOSESrc control signals. 
+// TODO: Fix error regarding the case statement. 
 module loading (input logic [31:0] ReadData, input logic [2:0] func3, input logic [1:0] ResultSrc, output logic [31:0] out);
   // Control signals yet to be implemented. Just created for testing purposes
   logic LWordSource;
@@ -277,6 +279,8 @@ module loading (input logic [31:0] ReadData, input logic [2:0] func3, input logi
  always_comb
   //if (ResultSrc[0]){
 
+  // having trouble figuring out how to output the 32 bit data. For example
+  // Problme: instead of sending out 0x(zzzzzz07) it should send (0x00000007) 
        case(func3)
 	    3'b000: out = {24'b0, lbyte[7:0]};
             3'b001: out = {16'b0, halfword[15:0]};
